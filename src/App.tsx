@@ -4,6 +4,8 @@ import { InputMask } from 'primereact/inputmask';
 import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.css';
+// @ts-ignore
+import { saveAsPng, saveAsJpeg } from 'save-html-as-image';
 
 const App = () => {
   const [name, setName] = useState('');
@@ -12,1207 +14,1401 @@ const App = () => {
   const [nationalTeamDebutDate, setNationalTeamDebutDate] = useState('');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
+  const [courtPosition, setCourtPosition] = useState('');
+
+  let contentToDownload = document.getElementById("div-to-download");
 
   const countries = [
     {
-      "name": "Afghanistan",
-      "dialCode": "+93",
-      "code": "AF"
+      "alpha2": "DZ",
+      "alpha3": "DZA",
+      "code": "012",
+      "name": "Algeria"
     },
     {
-      "name": "Aland Islands",
-      "dialCode": "+358",
-      "code": "AX"
+      "alpha2": "AO",
+      "alpha3": "AGO",
+      "code": "024",
+      "name": "Angola"
     },
     {
-      "name": "Albania",
-      "dialCode": "+355",
-      "code": "AL"
+      "alpha2": "BJ",
+      "alpha3": "BEN",
+      "code": "204",
+      "name": "Benin"
     },
     {
-      "name": "Algeria",
-      "dialCode": "+213",
-      "code": "DZ"
+      "alpha2": "BW",
+      "alpha3": "BWA",
+      "code": "072",
+      "name": "Botswana"
     },
     {
-      "name": "AmericanSamoa",
-      "dialCode": "+1684",
-      "code": "AS"
+      "alpha2": "BF",
+      "alpha3": "BFA",
+      "code": "854",
+      "name": "Burkina Faso"
     },
     {
-      "name": "Andorra",
-      "dialCode": "+376",
-      "code": "AD"
+      "alpha2": "BI",
+      "alpha3": "BDI",
+      "code": "108",
+      "name": "Burundi"
     },
     {
-      "name": "Angola",
-      "dialCode": "+244",
-      "code": "AO"
+      "alpha2": "CM",
+      "alpha3": "CMR",
+      "code": "120",
+      "name": "Cameroon"
     },
     {
-      "name": "Anguilla",
-      "dialCode": "+1264",
-      "code": "AI"
+      "alpha2": "CV",
+      "alpha3": "CPV",
+      "code": "132",
+      "name": "Cape Verde"
     },
     {
-      "name": "Antarctica",
-      "dialCode": "+672",
-      "code": "AQ"
+      "alpha2": "CF",
+      "alpha3": "CAF",
+      "code": "140",
+      "name": "Central African Republic"
     },
     {
-      "name": "Antigua and Barbuda",
-      "dialCode": "+1268",
-      "code": "AG"
+      "alpha2": "TD",
+      "alpha3": "TCD",
+      "code": "148",
+      "name": "Chad"
     },
     {
-      "name": "Argentina",
-      "dialCode": "+54",
-      "code": "AR"
+      "alpha2": "KM",
+      "alpha3": "COM",
+      "code": "174",
+      "name": "Comoros"
     },
     {
-      "name": "Armenia",
-      "dialCode": "+374",
-      "code": "AM"
+      "alpha2": "CG",
+      "alpha3": "COG",
+      "code": "178",
+      "name": "Congo"
     },
     {
-      "name": "Aruba",
-      "dialCode": "+297",
-      "code": "AW"
+      "alpha2": "CD",
+      "alpha3": "COD",
+      "code": "180",
+      "name": "Congo, the Democratic Republic of the"
     },
     {
-      "name": "Australia",
-      "dialCode": "+61",
-      "code": "AU"
+      "alpha2": "CI",
+      "alpha3": "CIV",
+      "code": "384",
+      "name": "Cote D'Ivoire"
     },
     {
-      "name": "Austria",
-      "dialCode": "+43",
-      "code": "AT"
+      "alpha2": "DJ",
+      "alpha3": "DJI",
+      "code": "262",
+      "name": "Djibouti"
     },
     {
-      "name": "Azerbaijan",
-      "dialCode": "+994",
-      "code": "AZ"
+      "alpha2": "EG",
+      "alpha3": "EGY",
+      "code": "818",
+      "name": "Egypt"
     },
     {
-      "name": "Bahamas",
-      "dialCode": "+1242",
-      "code": "BS"
+      "alpha2": "GQ",
+      "alpha3": "GNQ",
+      "code": "226",
+      "name": "Equatorial Guinea"
     },
     {
-      "name": "Bahrain",
-      "dialCode": "+973",
-      "code": "BH"
+      "alpha2": "ER",
+      "alpha3": "ERI",
+      "code": "232",
+      "name": "Eritrea"
     },
     {
-      "name": "Bangladesh",
-      "dialCode": "+880",
-      "code": "BD"
+      "alpha2": "ET",
+      "alpha3": "ETH",
+      "code": "231",
+      "name": "Ethiopia"
     },
     {
-      "name": "Barbados",
-      "dialCode": "+1246",
-      "code": "BB"
+      "alpha2": "GA",
+      "alpha3": "GAB",
+      "code": "266",
+      "name": "Gabon"
     },
     {
-      "name": "Belarus",
-      "dialCode": "+375",
-      "code": "BY"
+      "alpha2": "GM",
+      "alpha3": "GMB",
+      "code": "270",
+      "name": "Gambia"
     },
     {
-      "name": "Belgium",
-      "dialCode": "+32",
-      "code": "BE"
+      "alpha2": "GH",
+      "alpha3": "GHA",
+      "code": "288",
+      "name": "Ghana"
     },
     {
-      "name": "Belize",
-      "dialCode": "+501",
-      "code": "BZ"
+      "alpha2": "GN",
+      "alpha3": "GIN",
+      "code": "324",
+      "name": "Guinea"
     },
     {
-      "name": "Benin",
-      "dialCode": "+229",
-      "code": "BJ"
+      "alpha2": "GW",
+      "alpha3": "GNB",
+      "code": "624",
+      "name": "Guinea-Bissau"
     },
     {
-      "name": "Bermuda",
-      "dialCode": "+1441",
-      "code": "BM"
+      "alpha2": "KE",
+      "alpha3": "KEN",
+      "code": "404",
+      "name": "Kenya"
     },
     {
-      "name": "Bhutan",
-      "dialCode": "+975",
-      "code": "BT"
+      "alpha2": "LS",
+      "alpha3": "LSO",
+      "code": "426",
+      "name": "Lesotho"
     },
     {
-      "name": "Bolivia, Plurinational State of",
-      "dialCode": "+591",
-      "code": "BO"
+      "alpha2": "LR",
+      "alpha3": "LBR",
+      "code": "430",
+      "name": "Liberia"
     },
     {
-      "name": "Bosnia and Herzegovina",
-      "dialCode": "+387",
-      "code": "BA"
+      "alpha2": "LY",
+      "alpha3": "LBY",
+      "code": "434",
+      "name": "Libyan Arab Jamahiriya"
     },
     {
-      "name": "Botswana",
-      "dialCode": "+267",
-      "code": "BW"
+      "alpha2": "MG",
+      "alpha3": "MDG",
+      "code": "450",
+      "name": "Madagascar"
     },
     {
-      "name": "Brazil",
-      "dialCode": "+55",
-      "code": "BR"
+      "alpha2": "MW",
+      "alpha3": "MWI",
+      "code": "454",
+      "name": "Malawi"
     },
     {
-      "name": "British Indian Ocean Territory",
-      "dialCode": "+246",
-      "code": "IO"
+      "alpha2": "ML",
+      "alpha3": "MLI",
+      "code": "466",
+      "name": "Mali"
     },
     {
-      "name": "Brunei Darussalam",
-      "dialCode": "+673",
-      "code": "BN"
+      "alpha2": "MR",
+      "alpha3": "MRT",
+      "code": "478",
+      "name": "Mauritania"
     },
     {
-      "name": "Bulgaria",
-      "dialCode": "+359",
-      "code": "BG"
+      "alpha2": "MU",
+      "alpha3": "MUS",
+      "code": "480",
+      "name": "Mauritius"
     },
     {
-      "name": "Burkina Faso",
-      "dialCode": "+226",
-      "code": "BF"
+      "alpha2": "YT",
+      "alpha3": "MYT",
+      "code": "175",
+      "name": "Mayotte"
     },
     {
-      "name": "Burundi",
-      "dialCode": "+257",
-      "code": "BI"
+      "alpha2": "MA",
+      "alpha3": "MAR",
+      "code": "504",
+      "name": "Morocco"
     },
     {
-      "name": "Cambodia",
-      "dialCode": "+855",
-      "code": "KH"
+      "alpha2": "MZ",
+      "alpha3": "MOZ",
+      "code": "508",
+      "name": "Mozambique"
     },
     {
-      "name": "Cameroon",
-      "dialCode": "+237",
-      "code": "CM"
+      "alpha2": "NA",
+      "alpha3": "NAM",
+      "code": "516",
+      "name": "Namibia"
     },
     {
-      "name": "Canada",
-      "dialCode": "+1",
-      "code": "CA"
+      "alpha2": "NE",
+      "alpha3": "NER",
+      "code": "562",
+      "name": "Niger"
     },
     {
-      "name": "Cape Verde",
-      "dialCode": "+238",
-      "code": "CV"
+      "alpha2": "NG",
+      "alpha3": "NGA",
+      "code": "566",
+      "name": "Nigeria"
     },
     {
-      "name": "Cayman Islands",
-      "dialCode": "+ 345",
-      "code": "KY"
+      "alpha2": "RE",
+      "alpha3": "REU",
+      "code": "638",
+      "name": "Reunion"
     },
     {
-      "name": "Central African Republic",
-      "dialCode": "+236",
-      "code": "CF"
+      "alpha2": "RW",
+      "alpha3": "RWA",
+      "code": "646",
+      "name": "Rwanda"
     },
     {
-      "name": "Chad",
-      "dialCode": "+235",
-      "code": "TD"
+      "alpha2": "SH",
+      "alpha3": "SHN",
+      "code": "654",
+      "name": "Saint Helena"
     },
     {
-      "name": "Chile",
-      "dialCode": "+56",
-      "code": "CL"
+      "alpha2": "ST",
+      "alpha3": "STP",
+      "code": "678",
+      "name": "Sao Tome and Principe"
     },
     {
-      "name": "China",
-      "dialCode": "+86",
-      "code": "CN"
+      "alpha2": "SN",
+      "alpha3": "SEN",
+      "code": "686",
+      "name": "Senegal"
     },
     {
-      "name": "Christmas Island",
-      "dialCode": "+61",
-      "code": "CX"
+      "alpha2": "SC",
+      "alpha3": "SYC",
+      "code": "690",
+      "name": "Seychelles"
     },
     {
-      "name": "Cocos (Keeling) Islands",
-      "dialCode": "+61",
-      "code": "CC"
+      "alpha2": "SL",
+      "alpha3": "SLE",
+      "code": "694",
+      "name": "Sierra Leone"
     },
     {
-      "name": "Colombia",
-      "dialCode": "+57",
-      "code": "CO"
+      "alpha2": "SO",
+      "alpha3": "SOM",
+      "code": "706",
+      "name": "Somalia"
     },
     {
-      "name": "Comoros",
-      "dialCode": "+269",
-      "code": "KM"
+      "alpha2": "ZA",
+      "alpha3": "ZAF",
+      "code": "710",
+      "name": "South Africa"
     },
     {
-      "name": "Congo",
-      "dialCode": "+242",
-      "code": "CG"
+      "alpha2": "SS",
+      "alpha3": "SSD",
+      "code": "728",
+      "name": "South Sudan"
     },
     {
-      "name": "Congo, The Democratic Republic of the Congo",
-      "dialCode": "+243",
-      "code": "CD"
+      "alpha2": "SD",
+      "alpha3": "SDN",
+      "code": "729",
+      "name": "Sudan"
     },
     {
-      "name": "Cook Islands",
-      "dialCode": "+682",
-      "code": "CK"
+      "alpha2": "SZ",
+      "alpha3": "SWZ",
+      "code": "748",
+      "name": "Swaziland"
     },
     {
-      "name": "Costa Rica",
-      "dialCode": "+506",
-      "code": "CR"
+      "alpha2": "TZ",
+      "alpha3": "TZA",
+      "code": "834",
+      "name": "Tanzania, United Republic of"
     },
     {
-      "name": "Cote d'Ivoire",
-      "dialCode": "+225",
-      "code": "CI"
+      "alpha2": "TG",
+      "alpha3": "TGO",
+      "code": "768",
+      "name": "Togo"
     },
     {
-      "name": "Croatia",
-      "dialCode": "+385",
-      "code": "HR"
+      "alpha2": "TN",
+      "alpha3": "TUN",
+      "code": "788",
+      "name": "Tunisia"
     },
     {
-      "name": "Cuba",
-      "dialCode": "+53",
-      "code": "CU"
+      "alpha2": "UG",
+      "alpha3": "UGA",
+      "code": "800",
+      "name": "Uganda"
     },
     {
-      "name": "Cyprus",
-      "dialCode": "+357",
-      "code": "CY"
+      "alpha2": "EH",
+      "alpha3": "ESH",
+      "code": "732",
+      "name": "Western Sahara"
     },
     {
-      "name": "Czech Republic",
-      "dialCode": "+420",
-      "code": "CZ"
+      "alpha2": "ZM",
+      "alpha3": "ZMB",
+      "code": "894",
+      "name": "Zambia"
     },
     {
-      "name": "Denmark",
-      "dialCode": "+45",
-      "code": "DK"
+      "alpha2": "ZW",
+      "alpha3": "ZWE",
+      "code": "716",
+      "name": "Zimbabwe"
     },
     {
-      "name": "Djibouti",
-      "dialCode": "+253",
-      "code": "DJ"
+      "alpha2": "AF",
+      "alpha3": "AFG",
+      "code": "004",
+      "name": "Afghanistan"
     },
     {
-      "name": "Dominica",
-      "dialCode": "+1767",
-      "code": "DM"
+      "alpha2": "AM",
+      "alpha3": "ARM",
+      "code": "051",
+      "name": "Armenia"
     },
     {
-      "name": "Dominican Republic",
-      "dialCode": "+1849",
-      "code": "DO"
+      "alpha2": "AZ",
+      "alpha3": "AZE",
+      "code": "031",
+      "name": "Azerbaijan"
     },
     {
-      "name": "Ecuador",
-      "dialCode": "+593",
-      "code": "EC"
+      "alpha2": "BH",
+      "alpha3": "BHR",
+      "code": "048",
+      "name": "Bahrain"
     },
     {
-      "name": "Egypt",
-      "dialCode": "+20",
-      "code": "EG"
+      "alpha2": "BD",
+      "alpha3": "BGD",
+      "code": "050",
+      "name": "Bangladesh"
     },
     {
-      "name": "El Salvador",
-      "dialCode": "+503",
-      "code": "SV"
+      "alpha2": "BT",
+      "alpha3": "BTN",
+      "code": "064",
+      "name": "Bhutan"
     },
     {
-      "name": "Equatorial Guinea",
-      "dialCode": "+240",
-      "code": "GQ"
+      "alpha2": "IO",
+      "alpha3": "IOT",
+      "code": "086",
+      "name": "British Indian Ocean Territory"
     },
     {
-      "name": "Eritrea",
-      "dialCode": "+291",
-      "code": "ER"
+      "alpha2": "BN",
+      "alpha3": "BRN",
+      "code": "096",
+      "name": "Brunei Darussalam"
     },
     {
-      "name": "Estonia",
-      "dialCode": "+372",
-      "code": "EE"
+      "alpha2": "KH",
+      "alpha3": "KHM",
+      "code": "116",
+      "name": "Cambodia"
     },
     {
-      "name": "Ethiopia",
-      "dialCode": "+251",
-      "code": "ET"
+      "alpha2": "CN",
+      "alpha3": "CHN",
+      "code": "156",
+      "name": "China"
     },
     {
-      "name": "Falkland Islands (Malvinas)",
-      "dialCode": "+500",
-      "code": "FK"
+      "alpha2": "CX",
+      "alpha3": "CXR",
+      "code": "162",
+      "name": "Christmas Island"
     },
     {
-      "name": "Faroe Islands",
-      "dialCode": "+298",
-      "code": "FO"
+      "alpha2": "CC",
+      "alpha3": "CCK",
+      "code": "166",
+      "name": "Cocos (Keeling) Islands"
     },
     {
-      "name": "Fiji",
-      "dialCode": "+679",
-      "code": "FJ"
+      "alpha2": "GE",
+      "alpha3": "GEO",
+      "code": "268",
+      "name": "Georgia"
     },
     {
-      "name": "Finland",
-      "dialCode": "+358",
-      "code": "FI"
+      "alpha2": "HK",
+      "alpha3": "HKG",
+      "code": "344",
+      "name": "Hong Kong"
     },
     {
-      "name": "France",
-      "dialCode": "+33",
-      "code": "FR"
+      "alpha2": "IN",
+      "alpha3": "IND",
+      "code": "356",
+      "name": "India"
     },
     {
-      "name": "French Guiana",
-      "dialCode": "+594",
-      "code": "GF"
+      "alpha2": "ID",
+      "alpha3": "IDN",
+      "code": "360",
+      "name": "Indonesia"
     },
     {
-      "name": "French Polynesia",
-      "dialCode": "+689",
-      "code": "PF"
+      "alpha2": "IR",
+      "alpha3": "IRN",
+      "code": "364",
+      "name": "Iran, Islamic Republic of"
     },
     {
-      "name": "Gabon",
-      "dialCode": "+241",
-      "code": "GA"
+      "alpha2": "IQ",
+      "alpha3": "IRQ",
+      "code": "368",
+      "name": "Iraq"
     },
     {
-      "name": "Gambia",
-      "dialCode": "+220",
-      "code": "GM"
+      "alpha2": "JP",
+      "alpha3": "JPN",
+      "code": "392",
+      "name": "Japan"
     },
     {
-      "name": "Georgia",
-      "dialCode": "+995",
-      "code": "GE"
+      "alpha2": "JO",
+      "alpha3": "JOR",
+      "code": "400",
+      "name": "Jordan"
     },
     {
-      "name": "Germany",
-      "dialCode": "+49",
-      "code": "DE"
+      "alpha2": "KZ",
+      "alpha3": "KAZ",
+      "code": "398",
+      "name": "Kazakhstan"
     },
     {
-      "name": "Ghana",
-      "dialCode": "+233",
-      "code": "GH"
+      "alpha2": "KP",
+      "alpha3": "PRK",
+      "code": "408",
+      "name": "North Korea"
     },
     {
-      "name": "Gibraltar",
-      "dialCode": "+350",
-      "code": "GI"
+      "alpha2": "KR",
+      "alpha3": "KOR",
+      "code": "410",
+      "name": "South Korea"
     },
     {
-      "name": "Greece",
-      "dialCode": "+30",
-      "code": "GR"
+      "alpha2": "KW",
+      "alpha3": "KWT",
+      "code": "414",
+      "name": "Kuwait"
     },
     {
-      "name": "Greenland",
-      "dialCode": "+299",
-      "code": "GL"
+      "alpha2": "KG",
+      "alpha3": "KGZ",
+      "code": "417",
+      "name": "Kyrgyzstan"
     },
     {
-      "name": "Grenada",
-      "dialCode": "+1473",
-      "code": "GD"
+      "alpha2": "LB",
+      "alpha3": "LBN",
+      "code": "422",
+      "name": "Lebanon"
     },
     {
-      "name": "Guadeloupe",
-      "dialCode": "+590",
-      "code": "GP"
+      "alpha2": "MO",
+      "alpha3": "MAC",
+      "code": "446",
+      "name": "Macao"
     },
     {
-      "name": "Guam",
-      "dialCode": "+1671",
-      "code": "GU"
+      "alpha2": "MY",
+      "alpha3": "MYS",
+      "code": "458",
+      "name": "Malaysia"
     },
     {
-      "name": "Guatemala",
-      "dialCode": "+502",
-      "code": "GT"
+      "alpha2": "MV",
+      "alpha3": "MDV",
+      "code": "462",
+      "name": "Maldives"
     },
     {
-      "name": "Guernsey",
-      "dialCode": "+44",
-      "code": "GG"
+      "alpha2": "MN",
+      "alpha3": "MNG",
+      "code": "496",
+      "name": "Mongolia"
     },
     {
-      "name": "Guinea",
-      "dialCode": "+224",
-      "code": "GN"
+      "alpha2": "MM",
+      "alpha3": "MMR",
+      "code": "104",
+      "name": "Myanmar"
     },
     {
-      "name": "Guinea-Bissau",
-      "dialCode": "+245",
-      "code": "GW"
+      "alpha2": "NP",
+      "alpha3": "NPL",
+      "code": "524",
+      "name": "Nepal"
     },
     {
-      "name": "Guyana",
-      "dialCode": "+595",
-      "code": "GY"
+      "alpha2": "OM",
+      "alpha3": "OMN",
+      "code": "512",
+      "name": "Oman"
     },
     {
-      "name": "Haiti",
-      "dialCode": "+509",
-      "code": "HT"
+      "alpha2": "PK",
+      "alpha3": "PAK",
+      "code": "586",
+      "name": "Pakistan"
     },
     {
-      "name": "Holy See (Vatican City State)",
-      "dialCode": "+379",
-      "code": "VA"
+      "alpha2": "PS",
+      "alpha3": "PSE",
+      "code": "275",
+      "name": "Palestinian Territory, Occupied"
     },
     {
-      "name": "Honduras",
-      "dialCode": "+504",
-      "code": "HN"
+      "alpha2": "PH",
+      "alpha3": "PHL",
+      "code": "608",
+      "name": "Philippines"
     },
     {
-      "name": "Hong Kong",
-      "dialCode": "+852",
-      "code": "HK"
+      "alpha2": "QA",
+      "alpha3": "QAT",
+      "code": "634",
+      "name": "Qatar"
     },
     {
-      "name": "Hungary",
-      "dialCode": "+36",
-      "code": "HU"
+      "alpha2": "SA",
+      "alpha3": "SAU",
+      "code": "682",
+      "name": "Saudi Arabia"
     },
     {
-      "name": "Iceland",
-      "dialCode": "+354",
-      "code": "IS"
+      "alpha2": "SG",
+      "alpha3": "SGP",
+      "code": "702",
+      "name": "Singapore"
     },
     {
-      "name": "India",
-      "dialCode": "+91",
-      "code": "IN"
+      "alpha2": "LK",
+      "alpha3": "LKA",
+      "code": "144",
+      "name": "Sri Lanka"
     },
     {
-      "name": "Indonesia",
-      "dialCode": "+62",
-      "code": "ID"
+      "alpha2": "SY",
+      "alpha3": "SYR",
+      "code": "760",
+      "name": "Syrian Arab Republic"
     },
     {
-      "name": "Iran, Islamic Republic of Persian Gulf",
-      "dialCode": "+98",
-      "code": "IR"
+      "alpha2": "TW",
+      "alpha3": "TWN",
+      "code": "158",
+      "name": "Taiwan"
     },
     {
-      "name": "Iraq",
-      "dialCode": "+964",
-      "code": "IQ"
+      "alpha2": "TJ",
+      "alpha3": "TJK",
+      "code": "762",
+      "name": "Tajikistan"
     },
     {
-      "name": "Ireland",
-      "dialCode": "+353",
-      "code": "IE"
+      "alpha2": "TH",
+      "alpha3": "THA",
+      "code": "764",
+      "name": "Thailand"
     },
     {
-      "name": "Isle of Man",
-      "dialCode": "+44",
-      "code": "IM"
+      "alpha2": "TR",
+      "alpha3": "TUR",
+      "code": "792",
+      "name": "Turkey"
     },
     {
-      "name": "Israel",
-      "dialCode": "+972",
-      "code": "IL"
+      "alpha2": "TM",
+      "alpha3": "TKM",
+      "code": "795",
+      "name": "Turkmenistan"
     },
     {
-      "name": "Italy",
-      "dialCode": "+39",
-      "code": "IT"
+      "alpha2": "AE",
+      "alpha3": "ARE",
+      "code": "784",
+      "name": "United Arab Emirates"
     },
     {
-      "name": "Jamaica",
-      "dialCode": "+1876",
-      "code": "JM"
+      "alpha2": "UZ",
+      "alpha3": "UZB",
+      "code": "860",
+      "name": "Uzbekistan"
     },
     {
-      "name": "Japan",
-      "dialCode": "+81",
-      "code": "JP"
+      "alpha2": "VN",
+      "alpha3": "VNM",
+      "code": "704",
+      "name": "Viet Nam"
     },
     {
-      "name": "Jersey",
-      "dialCode": "+44",
-      "code": "JE"
+      "alpha2": "YE",
+      "alpha3": "YEM",
+      "code": "887",
+      "name": "Yemen"
     },
     {
-      "name": "Jordan",
-      "dialCode": "+962",
-      "code": "JO"
+      "alpha2": "AX",
+      "alpha3": "ALA",
+      "code": "248",
+      "name": "Åland Islands"
     },
     {
-      "name": "Kazakhstan",
-      "dialCode": "+77",
-      "code": "KZ"
+      "alpha2": "AL",
+      "alpha3": "ALB",
+      "code": "008",
+      "name": "Albania"
     },
     {
-      "name": "Kenya",
-      "dialCode": "+254",
-      "code": "KE"
+      "alpha2": "AD",
+      "alpha3": "AND",
+      "code": "020",
+      "name": "Andorra"
     },
     {
-      "name": "Kiribati",
-      "dialCode": "+686",
-      "code": "KI"
+      "alpha2": "AT",
+      "alpha3": "AUT",
+      "code": "040",
+      "name": "Austria"
     },
     {
-      "name": "Korea, Democratic People's Republic of Korea",
-      "dialCode": "+850",
-      "code": "KP"
+      "alpha2": "BY",
+      "alpha3": "BLR",
+      "code": "112",
+      "name": "Belarus"
     },
     {
-      "name": "Korea, Republic of South Korea",
-      "dialCode": "+82",
-      "code": "KR"
+      "alpha2": "BE",
+      "alpha3": "BEL",
+      "code": "056",
+      "name": "Belgium"
     },
     {
-      "name": "Kuwait",
-      "dialCode": "+965",
-      "code": "KW"
+      "alpha2": "BA",
+      "alpha3": "BIH",
+      "code": "070",
+      "name": "Bosnia and Herzegovina"
     },
     {
-      "name": "Kyrgyzstan",
-      "dialCode": "+996",
-      "code": "KG"
+      "alpha2": "BG",
+      "alpha3": "BGR",
+      "code": "100",
+      "name": "Bulgaria"
     },
     {
-      "name": "Laos",
-      "dialCode": "+856",
-      "code": "LA"
+      "alpha2": "HR",
+      "alpha3": "HRV",
+      "code": "191",
+      "name": "Croatia"
     },
     {
-      "name": "Latvia",
-      "dialCode": "+371",
-      "code": "LV"
+      "alpha2": "CY",
+      "alpha3": "CYP",
+      "code": "196",
+      "name": "Cyprus"
     },
     {
-      "name": "Lebanon",
-      "dialCode": "+961",
-      "code": "LB"
+      "alpha2": "CZ",
+      "alpha3": "CZE",
+      "code": "203",
+      "name": "Czech Republic"
     },
     {
-      "name": "Lesotho",
-      "dialCode": "+266",
-      "code": "LS"
+      "alpha2": "DK",
+      "alpha3": "DNK",
+      "code": "208",
+      "name": "Denmark"
     },
     {
-      "name": "Liberia",
-      "dialCode": "+231",
-      "code": "LR"
+      "alpha2": "EE",
+      "alpha3": "EST",
+      "code": "233",
+      "name": "Estonia"
     },
     {
-      "name": "Libyan Arab Jamahiriya",
-      "dialCode": "+218",
-      "code": "LY"
+      "alpha2": "FO",
+      "alpha3": "FRO",
+      "code": "234",
+      "name": "Faroe Islands"
     },
     {
-      "name": "Liechtenstein",
-      "dialCode": "+423",
-      "code": "LI"
+      "alpha2": "FI",
+      "alpha3": "FIN",
+      "code": "246",
+      "name": "Finland"
     },
     {
-      "name": "Lithuania",
-      "dialCode": "+370",
-      "code": "LT"
+      "alpha2": "FR",
+      "alpha3": "FRA",
+      "code": "250",
+      "name": "France"
     },
     {
-      "name": "Luxembourg",
-      "dialCode": "+352",
-      "code": "LU"
+      "alpha2": "GE",
+      "alpha3": "GEO",
+      "code": "268",
+      "name": "Georgia"
     },
     {
-      "name": "Macao",
-      "dialCode": "+853",
-      "code": "MO"
+      "alpha2": "DE",
+      "alpha3": "DEU",
+      "code": "276",
+      "name": "Germany"
     },
     {
-      "name": "Macedonia",
-      "dialCode": "+389",
-      "code": "MK"
+      "alpha2": "GI",
+      "alpha3": "GIB",
+      "code": "292",
+      "name": "Gibraltar"
     },
     {
-      "name": "Madagascar",
-      "dialCode": "+261",
-      "code": "MG"
+      "alpha2": "GR",
+      "alpha3": "GRC",
+      "code": "300",
+      "name": "Greece"
     },
     {
-      "name": "Malawi",
-      "dialCode": "+265",
-      "code": "MW"
+      "alpha2": "VA",
+      "alpha3": "VAT",
+      "code": "336",
+      "name": "Holy See (Vatican City State)"
     },
     {
-      "name": "Malaysia",
-      "dialCode": "+60",
-      "code": "MY"
+      "alpha2": "HU",
+      "alpha3": "HUN",
+      "code": "348",
+      "name": "Hungary"
     },
     {
-      "name": "Maldives",
-      "dialCode": "+960",
-      "code": "MV"
+      "alpha2": "IS",
+      "alpha3": "ISL",
+      "code": "352",
+      "name": "Iceland"
     },
     {
-      "name": "Mali",
-      "dialCode": "+223",
-      "code": "ML"
+      "alpha2": "IE",
+      "alpha3": "IRL",
+      "code": "372",
+      "name": "Ireland"
     },
     {
-      "name": "Malta",
-      "dialCode": "+356",
-      "code": "MT"
+      "alpha2": "IL",
+      "alpha3": "ISR",
+      "code": "376",
+      "name": "Israel"
     },
     {
-      "name": "Marshall Islands",
-      "dialCode": "+692",
-      "code": "MH"
+      "alpha2": "IT",
+      "alpha3": "ITA",
+      "code": "380",
+      "name": "Italy"
     },
     {
-      "name": "Martinique",
-      "dialCode": "+596",
-      "code": "MQ"
+      "alpha2": "LV",
+      "alpha3": "LVA",
+      "code": "428",
+      "name": "Latvia"
     },
     {
-      "name": "Mauritania",
-      "dialCode": "+222",
-      "code": "MR"
+      "alpha2": "LI",
+      "alpha3": "LIE",
+      "code": "438",
+      "name": "Liechtenstein"
     },
     {
-      "name": "Mauritius",
-      "dialCode": "+230",
-      "code": "MU"
+      "alpha2": "LT",
+      "alpha3": "LTU",
+      "code": "440",
+      "name": "Lithuania"
     },
     {
-      "name": "Mayotte",
-      "dialCode": "+262",
-      "code": "YT"
+      "alpha2": "LU",
+      "alpha3": "LUX",
+      "code": "442",
+      "name": "Luxembourg"
     },
     {
-      "name": "Mexico",
-      "dialCode": "+52",
-      "code": "MX"
+      "alpha2": "MK",
+      "alpha3": "MKD",
+      "code": "807",
+      "name": "Macedonia, the Former Yugoslav Republic of"
     },
     {
-      "name": "Micronesia, Federated States of Micronesia",
-      "dialCode": "+691",
-      "code": "FM"
+      "alpha2": "MT",
+      "alpha3": "MLT",
+      "code": "470",
+      "name": "Malta"
     },
     {
-      "name": "Moldova",
-      "dialCode": "+373",
-      "code": "MD"
+      "alpha2": "MD",
+      "alpha3": "MDA",
+      "code": "498",
+      "name": "Moldova, Republic of"
     },
     {
-      "name": "Monaco",
-      "dialCode": "+377",
-      "code": "MC"
+      "alpha2": "MC",
+      "alpha3": "MCO",
+      "code": "492",
+      "name": "Monaco"
     },
     {
-      "name": "Mongolia",
-      "dialCode": "+976",
-      "code": "MN"
+      "alpha2": "ME",
+      "alpha3": "MNE",
+      "code": "499",
+      "name": "Montenegro"
     },
     {
-      "name": "Montenegro",
-      "dialCode": "+382",
-      "code": "ME"
+      "alpha2": "NL",
+      "alpha3": "NLD",
+      "code": "528",
+      "name": "Netherlands"
     },
     {
-      "name": "Montserrat",
-      "dialCode": "+1664",
-      "code": "MS"
+      "alpha2": "NO",
+      "alpha3": "NOR",
+      "code": "578",
+      "name": "Norway"
     },
     {
-      "name": "Morocco",
-      "dialCode": "+212",
-      "code": "MA"
+      "alpha2": "PL",
+      "alpha3": "POL",
+      "code": "616",
+      "name": "Poland"
     },
     {
-      "name": "Mozambique",
-      "dialCode": "+258",
-      "code": "MZ"
+      "alpha2": "PT",
+      "alpha3": "PRT",
+      "code": "620",
+      "name": "Portugal"
     },
     {
-      "name": "Myanmar",
-      "dialCode": "+95",
-      "code": "MM"
+      "alpha2": "RO",
+      "alpha3": "ROU",
+      "code": "642",
+      "name": "Romania"
     },
     {
-      "name": "Namibia",
-      "dialCode": "+264",
-      "code": "NA"
+      "alpha2": "RU",
+      "alpha3": "RUS",
+      "code": "643",
+      "name": "Russian Federation"
     },
     {
-      "name": "Nauru",
-      "dialCode": "+674",
-      "code": "NR"
+      "alpha2": "SM",
+      "alpha3": "SMR",
+      "code": "674",
+      "name": "San Marino"
     },
     {
-      "name": "Nepal",
-      "dialCode": "+977",
-      "code": "NP"
+      "alpha2": "RS",
+      "alpha3": "SRB",
+      "code": "688",
+      "name": "Serbia"
     },
     {
-      "name": "Netherlands",
-      "dialCode": "+31",
-      "code": "NL"
+      "alpha2": "SK",
+      "alpha3": "SVK",
+      "code": "703",
+      "name": "Slovakia"
     },
     {
-      "name": "New Caledonia",
-      "dialCode": "+687",
-      "code": "NC"
+      "alpha2": "SI",
+      "alpha3": "SVN",
+      "code": "705",
+      "name": "Slovenia"
     },
     {
-      "name": "New Zealand",
-      "dialCode": "+64",
-      "code": "NZ"
+      "alpha2": "ES",
+      "alpha3": "ESP",
+      "code": "724",
+      "name": "Spain"
     },
     {
-      "name": "Nicaragua",
-      "dialCode": "+505",
-      "code": "NI"
+      "alpha2": "SE",
+      "alpha3": "SWE",
+      "code": "752",
+      "name": "Sweden"
     },
     {
-      "name": "Niger",
-      "dialCode": "+227",
-      "code": "NE"
+      "alpha2": "CH",
+      "alpha3": "CHE",
+      "code": "756",
+      "name": "Switzerland"
     },
     {
-      "name": "Nigeria",
-      "dialCode": "+234",
-      "code": "NG"
+      "alpha2": "TR",
+      "alpha3": "TUR",
+      "code": "792",
+      "name": "Turkey"
     },
     {
-      "name": "Niue",
-      "dialCode": "+683",
-      "code": "NU"
+      "alpha2": "UA",
+      "alpha3": "UKR",
+      "code": "804",
+      "name": "Ukraine"
     },
     {
-      "name": "Norfolk Island",
-      "dialCode": "+672",
-      "code": "NF"
+      "alpha2": "GB",
+      "alpha3": "GBR",
+      "code": "826",
+      "name": "United Kingdom"
     },
     {
-      "name": "Northern Mariana Islands",
-      "dialCode": "+1670",
-      "code": "MP"
+      "alpha2": "AI",
+      "alpha3": "AIA",
+      "code": "660",
+      "name": "Anguilla"
     },
     {
-      "name": "Norway",
-      "dialCode": "+47",
-      "code": "NO"
+      "alpha2": "AG",
+      "alpha3": "ATG",
+      "code": "028",
+      "name": "Antigua and Barbuda"
     },
     {
-      "name": "Oman",
-      "dialCode": "+968",
-      "code": "OM"
+      "alpha2": "AW",
+      "alpha3": "ABW",
+      "code": "533",
+      "name": "Aruba"
     },
     {
-      "name": "Pakistan",
-      "dialCode": "+92",
-      "code": "PK"
+      "alpha2": "BS",
+      "alpha3": "BHS",
+      "code": "044",
+      "name": "Bahamas"
     },
     {
-      "name": "Palau",
-      "dialCode": "+680",
-      "code": "PW"
+      "alpha2": "BB",
+      "alpha3": "BRB",
+      "code": "052",
+      "name": "Barbados"
     },
     {
-      "name": "Palestinian Territory, Occupied",
-      "dialCode": "+970",
-      "code": "PS"
+      "alpha2": "BZ",
+      "alpha3": "BLZ",
+      "code": "084",
+      "name": "Belize"
     },
     {
-      "name": "Panama",
-      "dialCode": "+507",
-      "code": "PA"
+      "alpha2": "BM",
+      "alpha3": "BMU",
+      "code": "060",
+      "name": "Bermuda"
     },
     {
-      "name": "Papua New Guinea",
-      "dialCode": "+675",
-      "code": "PG"
+      "alpha2": "VG",
+      "alpha3": "VGB",
+      "code": "092",
+      "name": "Virgin Islands, British"
     },
     {
-      "name": "Paraguay",
-      "dialCode": "+595",
-      "code": "PY"
+      "alpha2": "CA",
+      "alpha3": "CAN",
+      "code": "124",
+      "name": "Canada"
     },
     {
-      "name": "Peru",
-      "dialCode": "+51",
-      "code": "PE"
+      "alpha2": "KY",
+      "alpha3": "CYM",
+      "code": "136",
+      "name": "Cayman Islands"
     },
     {
-      "name": "Philippines",
-      "dialCode": "+63",
-      "code": "PH"
+      "alpha2": "CR",
+      "alpha3": "CRI",
+      "code": "188",
+      "name": "Costa Rica"
     },
     {
-      "name": "Pitcairn",
-      "dialCode": "+872",
-      "code": "PN"
+      "alpha2": "CU",
+      "alpha3": "CUB",
+      "code": "192",
+      "name": "Cuba"
     },
     {
-      "name": "Poland",
-      "dialCode": "+48",
-      "code": "PL"
+      "alpha2": "DM",
+      "alpha3": "DMA",
+      "code": "212",
+      "name": "Dominica"
     },
     {
-      "name": "Portugal",
-      "dialCode": "+351",
-      "code": "PT"
+      "alpha2": "DO",
+      "alpha3": "DOM",
+      "code": "214",
+      "name": "Dominican Republic"
     },
     {
-      "name": "Puerto Rico",
-      "dialCode": "+1939",
-      "code": "PR"
+      "alpha2": "SV",
+      "alpha3": "SLV",
+      "code": "222",
+      "name": "El Salvador"
     },
     {
-      "name": "Qatar",
-      "dialCode": "+974",
-      "code": "QA"
+      "alpha2": "GL",
+      "alpha3": "GRL",
+      "code": "304",
+      "name": "Greenland"
     },
     {
-      "name": "Romania",
-      "dialCode": "+40",
-      "code": "RO"
+      "alpha2": "GD",
+      "alpha3": "GRD",
+      "code": "308",
+      "name": "Grenada"
     },
     {
-      "name": "Russia",
-      "dialCode": "+7",
-      "code": "RU"
+      "alpha2": "GP",
+      "alpha3": "GLP",
+      "code": "312",
+      "name": "Guadeloupe"
     },
     {
-      "name": "Rwanda",
-      "dialCode": "+250",
-      "code": "RW"
+      "alpha2": "GT",
+      "alpha3": "GTM",
+      "code": "320",
+      "name": "Guatemala"
     },
     {
-      "name": "Reunion",
-      "dialCode": "+262",
-      "code": "RE"
+      "alpha2": "HT",
+      "alpha3": "HTI",
+      "code": "332",
+      "name": "Haiti"
     },
     {
-      "name": "Saint Barthelemy",
-      "dialCode": "+590",
-      "code": "BL"
+      "alpha2": "HN",
+      "alpha3": "HND",
+      "code": "340",
+      "name": "Honduras"
     },
     {
-      "name": "Saint Kitts and Nevis",
-      "dialCode": "+1869",
-      "code": "KN"
+      "alpha2": "JM",
+      "alpha3": "JAM",
+      "code": "388",
+      "name": "Jamaica"
     },
     {
-      "name": "Saint Lucia",
-      "dialCode": "+1758",
-      "code": "LC"
+      "alpha2": "MQ",
+      "alpha3": "MTQ",
+      "code": "474",
+      "name": "Martinique"
     },
     {
-      "name": "Saint Martin",
-      "dialCode": "+590",
-      "code": "MF"
+      "alpha2": "MX",
+      "alpha3": "MEX",
+      "code": "484",
+      "name": "Mexico"
     },
     {
-      "name": "Saint Pierre and Miquelon",
-      "dialCode": "+508",
-      "code": "PM"
+      "alpha2": "NI",
+      "alpha3": "NIC",
+      "code": "558",
+      "name": "Nicaragua"
     },
     {
-      "name": "Saint Vincent and the Grenadines",
-      "dialCode": "+1784",
-      "code": "VC"
+      "alpha2": "PA",
+      "alpha3": "PAN",
+      "code": "591",
+      "name": "Panama"
     },
     {
-      "name": "Samoa",
-      "dialCode": "+685",
-      "code": "WS"
+      "alpha2": "PR",
+      "alpha3": "PRI",
+      "code": "630",
+      "name": "Puerto Rico"
     },
     {
-      "name": "San Marino",
-      "dialCode": "+378",
-      "code": "SM"
+      "alpha2": "KN",
+      "alpha3": "KNA",
+      "code": "659",
+      "name": "Saint Kitts and Nevis"
     },
     {
-      "name": "Sao Tome and Principe",
-      "dialCode": "+239",
-      "code": "ST"
+      "alpha2": "LC",
+      "alpha3": "LCA",
+      "code": "662",
+      "name": "Saint Lucia"
     },
     {
-      "name": "Saudi Arabia",
-      "dialCode": "+966",
-      "code": "SA"
+      "alpha2": "PM",
+      "alpha3": "SPM",
+      "code": "666",
+      "name": "Saint Pierre and Miquelon"
     },
     {
-      "name": "Senegal",
-      "dialCode": "+221",
-      "code": "SN"
+      "alpha2": "VC",
+      "alpha3": "VCT",
+      "code": "670",
+      "name": "Saint Vincent and the Grenadines"
     },
     {
-      "name": "Serbia",
-      "dialCode": "+381",
-      "code": "RS"
+      "alpha2": "BL",
+      "alpha3": "BLM",
+      "code": "652",
+      "name": "Saint Barthélemy"
     },
     {
-      "name": "Seychelles",
-      "dialCode": "+248",
-      "code": "SC"
+      "alpha2": "TT",
+      "alpha3": "TTO",
+      "code": "780",
+      "name": "Trinidad and Tobago"
     },
     {
-      "name": "Sierra Leone",
-      "dialCode": "+232",
-      "code": "SL"
+      "alpha2": "TC",
+      "alpha3": "TCA",
+      "code": "796",
+      "name": "Turks and Caicos Islands"
     },
     {
-      "name": "Singapore",
-      "dialCode": "+65",
-      "code": "SG"
+      "alpha2": "US",
+      "alpha3": "USA",
+      "code": "840",
+      "name": "United States of America"
     },
     {
-      "name": "Slovakia",
-      "dialCode": "+421",
-      "code": "SK"
+      "alpha2": "VI",
+      "alpha3": "VIR",
+      "code": "850",
+      "name": "Virgin Islands, U.S."
     },
     {
-      "name": "Slovenia",
-      "dialCode": "+386",
-      "code": "SI"
+      "alpha2": "AS",
+      "alpha3": "ASM",
+      "code": "016",
+      "name": "American Samoa"
     },
     {
-      "name": "Solomon Islands",
-      "dialCode": "+677",
-      "code": "SB"
+      "alpha2": "AU",
+      "alpha3": "AUS",
+      "code": "036",
+      "name": "Australia"
     },
     {
-      "name": "Somalia",
-      "dialCode": "+252",
-      "code": "SO"
+      "alpha2": "CK",
+      "alpha3": "COK",
+      "code": "184",
+      "name": "Cook Islands"
     },
     {
-      "name": "South Africa",
-      "dialCode": "+27",
-      "code": "ZA"
+      "alpha2": "FJ",
+      "alpha3": "FJI",
+      "code": "242",
+      "name": "Fiji"
     },
     {
-      "name": "South Sudan",
-      "dialCode": "+211",
-      "code": "SS"
+      "alpha2": "PF",
+      "alpha3": "PYF",
+      "code": "258",
+      "name": "French Polynesia"
     },
     {
-      "name": "South Georgia and the South Sandwich Islands",
-      "dialCode": "+500",
-      "code": "GS"
+      "alpha2": "GU",
+      "alpha3": "GUM",
+      "code": "316",
+      "name": "Guam"
     },
     {
-      "name": "Spain",
-      "dialCode": "+34",
-      "code": "ES"
+      "alpha2": "KI",
+      "alpha3": "KIR",
+      "code": "296",
+      "name": "Kiribati"
     },
     {
-      "name": "Sri Lanka",
-      "dialCode": "+94",
-      "code": "LK"
+      "alpha2": "MH",
+      "alpha3": "MHL",
+      "code": "584",
+      "name": "Marshall Islands"
     },
     {
-      "name": "Sudan",
-      "dialCode": "+249",
-      "code": "SD"
+      "alpha2": "FM",
+      "alpha3": "FSM",
+      "code": "583",
+      "name": "Micronesia, Federated States of"
     },
     {
-      "name": "Suriname",
-      "dialCode": "+597",
-      "code": "SR"
+      "alpha2": "NR",
+      "alpha3": "NRU",
+      "code": "520",
+      "name": "Nauru"
     },
     {
-      "name": "Swaziland",
-      "dialCode": "+268",
-      "code": "SZ"
+      "alpha2": "NC",
+      "alpha3": "NCL",
+      "code": "540",
+      "name": "New Caledonia"
     },
     {
-      "name": "Sweden",
-      "dialCode": "+46",
-      "code": "SE"
+      "alpha2": "NZ",
+      "alpha3": "NZL",
+      "code": "554",
+      "name": "New Zealand"
     },
     {
-      "name": "Switzerland",
-      "dialCode": "+41",
-      "code": "CH"
+      "alpha2": "NU",
+      "alpha3": "NIU",
+      "code": "570",
+      "name": "Niue"
     },
     {
-      "name": "Syrian Arab Republic",
-      "dialCode": "+963",
-      "code": "SY"
+      "alpha2": "NF",
+      "alpha3": "NFK",
+      "code": "574",
+      "name": "Norfolk Island"
     },
     {
-      "name": "Taiwan",
-      "dialCode": "+886",
-      "code": "TW"
+      "alpha2": "MP",
+      "alpha3": "MNP",
+      "code": "580",
+      "name": "Northern Mariana Islands"
     },
     {
-      "name": "Tajikistan",
-      "dialCode": "+992",
-      "code": "TJ"
+      "alpha2": "PW",
+      "alpha3": "PLW",
+      "code": "585",
+      "name": "Palau"
     },
     {
-      "name": "Tanzania, United Republic of Tanzania",
-      "dialCode": "+255",
-      "code": "TZ"
+      "alpha2": "PG",
+      "alpha3": "PNG",
+      "code": "598",
+      "name": "Papua New Guinea"
     },
     {
-      "name": "Thailand",
-      "dialCode": "+66",
-      "code": "TH"
+      "alpha2": "PN",
+      "alpha3": "PCN",
+      "code": "612",
+      "name": "Pitcairn"
     },
     {
-      "name": "Timor-Leste",
-      "dialCode": "+670",
-      "code": "TL"
+      "alpha2": "WS",
+      "alpha3": "WSM",
+      "code": "882",
+      "name": "Samoa"
     },
     {
-      "name": "Togo",
-      "dialCode": "+228",
-      "code": "TG"
+      "alpha2": "SB",
+      "alpha3": "SLB",
+      "code": "090",
+      "name": "Solomon Islands"
     },
     {
-      "name": "Tokelau",
-      "dialCode": "+690",
-      "code": "TK"
+      "alpha2": "TL",
+      "alpha3": "TLS",
+      "code": "626",
+      "name": "Timor-Leste"
     },
     {
-      "name": "Tonga",
-      "dialCode": "+676",
-      "code": "TO"
+      "alpha2": "TO",
+      "alpha3": "TON",
+      "code": "776",
+      "name": "Tonga"
     },
     {
-      "name": "Trinidad and Tobago",
-      "dialCode": "+1868",
-      "code": "TT"
+      "alpha2": "VU",
+      "alpha3": "VUT",
+      "code": "548",
+      "name": "Vanuatu"
     },
     {
-      "name": "Tunisia",
-      "dialCode": "+216",
-      "code": "TN"
+      "alpha2": "AR",
+      "alpha3": "ARG",
+      "code": "032",
+      "name": "Argentina"
     },
     {
-      "name": "Turkey",
-      "dialCode": "+90",
-      "code": "TR"
+      "alpha2": "BO",
+      "alpha3": "BOL",
+      "code": "068",
+      "name": "Bolivia"
     },
     {
-      "name": "Turkmenistan",
-      "dialCode": "+993",
-      "code": "TM"
+      "alpha2": "BR",
+      "alpha3": "BRA",
+      "code": "076",
+      "name": "Brazil"
     },
     {
-      "name": "Turks and Caicos Islands",
-      "dialCode": "+1649",
-      "code": "TC"
+      "alpha2": "CL",
+      "alpha3": "CHL",
+      "code": "152",
+      "name": "Chile"
     },
     {
-      "name": "Tuvalu",
-      "dialCode": "+688",
-      "code": "TV"
+      "alpha2": "CO",
+      "alpha3": "COL",
+      "code": "170",
+      "name": "Colombia"
     },
     {
-      "name": "Uganda",
-      "dialCode": "+256",
-      "code": "UG"
+      "alpha2": "EC",
+      "alpha3": "ECU",
+      "code": "218",
+      "name": "Ecuador"
     },
     {
-      "name": "Ukraine",
-      "dialCode": "+380",
-      "code": "UA"
+      "alpha2": "FK",
+      "alpha3": "FLK",
+      "code": "238",
+      "name": "Falkland Islands (Malvinas)"
     },
     {
-      "name": "United Arab Emirates",
-      "dialCode": "+971",
-      "code": "AE"
+      "alpha2": "GF",
+      "alpha3": "GUF",
+      "code": "254",
+      "name": "French Guiana"
     },
     {
-      "name": "United Kingdom",
-      "dialCode": "+44",
-      "code": "GB"
+      "alpha2": "GY",
+      "alpha3": "GUY",
+      "code": "328",
+      "name": "Guyana"
     },
     {
-      "name": "United States",
-      "dialCode": "+1",
-      "code": "US"
+      "alpha2": "PY",
+      "alpha3": "PRY",
+      "code": "600",
+      "name": "Paraguay"
     },
     {
-      "name": "Uruguay",
-      "dialCode": "+598",
-      "code": "UY"
+      "alpha2": "PE",
+      "alpha3": "PER",
+      "code": "604",
+      "name": "Peru"
     },
     {
-      "name": "Uzbekistan",
-      "dialCode": "+998",
-      "code": "UZ"
+      "alpha2": "UY",
+      "alpha3": "URY",
+      "code": "858",
+      "name": "Uruguay"
     },
     {
-      "name": "Vanuatu",
-      "dialCode": "+678",
-      "code": "VU"
-    },
-    {
-      "name": "Venezuela, Bolivarian Republic of Venezuela",
-      "dialCode": "+58",
-      "code": "VE"
-    },
-    {
-      "name": "Vietnam",
-      "dialCode": "+84",
-      "code": "VN"
-    },
-    {
-      "name": "Virgin Islands, British",
-      "dialCode": "+1284",
-      "code": "VG"
-    },
-    {
-      "name": "Virgin Islands, U.S.",
-      "dialCode": "+1340",
-      "code": "VI"
-    },
-    {
-      "name": "Wallis and Futuna",
-      "dialCode": "+681",
-      "code": "WF"
-    },
-    {
-      "name": "Yemen",
-      "dialCode": "+967",
-      "code": "YE"
-    },
-    {
-      "name": "Zambia",
-      "dialCode": "+260",
-      "code": "ZM"
-    },
-    {
-      "name": "Zimbabwe",
-      "dialCode": "+263",
-      "code": "ZW"
+      "alpha2": "VE",
+      "alpha3": "VEN",
+      "code": "862",
+      "name": "Venezuela"
     }
   ];
 
   useEffect(() => {
-    onCountryChange(countries.find(country => country.code == 'AR'));
+    onCountryChange(countries.find(country => country.alpha2 == 'AR'));
   }, [])
 
   const onCountryChange = (e: any) => {
@@ -1223,8 +1419,8 @@ const App = () => {
     if (option) {
       return (
         <div className="flex gap-2">
-          <img alt={option.name} src={`assets/flags/${option.code.toLowerCase()}.svg`} className='w-6' draggable={false} />
-          <div className='font-medium text-md leading-normal text-black'>{option.name}</div>
+          <img alt={option.name} src={`assets/flags/${option.alpha2.toLowerCase()}.svg`} className='w-6' draggable={false} />
+          <div className='font-normal text-md leading-normal text-black'>{option.name}</div>
         </div>
       );
     }
@@ -1233,7 +1429,7 @@ const App = () => {
   const countryOptionTemplate = (option: any) => {
     return (
       <div className="flex gap-2">
-        <img alt={option.name} src={`assets/flags/${option.code.toLowerCase()}.svg`} className='w-6' draggable={false} />
+        <img alt={option.name} src={`assets/flags/${option.alpha2.toLowerCase()}.svg`} className='w-6' draggable={false} />
         <div className='font-medium text-sm'>{option.name}</div>
       </div>
     );
@@ -1241,80 +1437,95 @@ const App = () => {
 
   return (
     <div className="w-screen h-screen flex justify-center items-center">
-      <div className="w-96 text-center p-4 border-2 border-gray-900 rounded-tl-md rounded-bl-md">
-        <h1 className="text-center text-4xl">Ajustes</h1>
-        <div className="flex flex-col gap-2">
-          <div className="flex flex-col gap-2">
-            <label className="text-left font-semibold">Nombre</label>
-            <input value={name} onChange={(e) => setName(e.target.value.toUpperCase())} placeholder="Lionel Messi" className="bg-[#f8f9fa] p-2 rounded-lg" />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-left font-semibold">Fecha de nacimiento</label>
-            <InputMask mask="99/99/9999" placeholder="24/06/1987" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-left font-semibold">Pais</label>
-            <Dropdown emptyFilterMessage='No se encontró un país con ese nombre' resetFilterOnHide showFilterClear className='w-100 flex items-center rounded-lg border-none bg-[#f8f9fa] active:!shadow-none h-10' value={country} options={countries} onChange={(e: any) => onCountryChange(e.value)} optionLabel="name" filter filterBy="name" placeholder="Pais"
-              valueTemplate={selectedCountryTemplate} itemTemplate={countryOptionTemplate} />
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-left font-semibold">Debut en la seleccion</label>
-            <InputMask mask="9999" placeholder="2005" value={nationalTeamDebutDate} onChange={(e) => setNationalTeamDebutDate(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-left font-semibold">Altura</label>
-            <InputMask mask="9,99" placeholder="1,70" value={height} onChange={(e) => setHeight(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
-          </div>
-          <div className="flex flex-col gap-1">
-            <label className="text-left font-semibold">Peso</label>
-            <InputMask mask="999" placeholder="72" value={weight} onChange={(e) => setWeight(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
+      <div className="flex rounded-lg shadow-lg border-2">
+        <div className="w-96 text-center p-4 border-r-2">
+          <h1 className="text-center font-semibold text-xl pb-2">Ajustes</h1>
+          <hr />
+          <div className="flex flex-col gap-2 mt-2">
+            <div className="flex flex-col gap-2">
+              <label className="text-left font-semibold text-sm">Nombre</label>
+              <input value={name} onChange={(e) => setName(e.target.value.toUpperCase())} placeholder="Lionel Messi" className="bg-[#f8f9fa] p-2 rounded-lg" />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-left font-semibold text-sm">Fecha de nacimiento</label>
+              <InputMask mask="99/99/9999" placeholder="24/06/1987" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-left font-semibold text-sm">Pais</label>
+              <Dropdown emptyFilterMessage='No se encontró un país con ese nombre' resetFilterOnHide showFilterClear className='w-100 flex items-center rounded-lg border-none bg-[#f8f9fa] active:!shadow-none h-10' value={country} options={countries} onChange={(e: any) => onCountryChange(e.value)} optionLabel="name" filter filterBy="name" placeholder="Pais"
+                valueTemplate={selectedCountryTemplate} itemTemplate={countryOptionTemplate} />
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-left font-semibold text-sm">Debut en la seleccion</label>
+              <InputMask mask="9999" placeholder="2005" value={nationalTeamDebutDate} onChange={(e) => setNationalTeamDebutDate(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-left font-semibold text-sm">Altura</label>
+              <InputMask mask="9,99" placeholder="1,70" value={height} onChange={(e) => setHeight(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-left font-semibold text-sm">Peso</label>
+              <InputMask mask="99?9" placeholder="72" value={weight} onChange={(e) => setWeight(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
+            </div>
+            <div className="flex flex-col gap-1">
+              <label className="text-left font-semibold text-sm">Posición en la cancha</label>
+              <InputMask mask="99?9" placeholder="72" value={courtPosition} onChange={(e) => setCourtPosition(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
+            </div>
           </div>
         </div>
-      </div>
-      <div className="w-96 text-center p-4 border-2 border-gray-900 border-l-0 rounded-tr-md rounded-br-md">
-        <h1 className="text-center text-4xl">Previsualización</h1>
-        <div className="border-2 border-gray-900 bg-[#d53618] p-5 relative">
-          <div className="flex justify-between">
-            <div>
-              <img alt="logo-qatar" src={`assets/qatar-logo.png`} style={{ 'width': '6rem' }} draggable={false} />
-              <h6>Cancha</h6>
-            </div>
-            <div>
-              <div className="bg-white">
-                <h6 className="font-bold text-[#7a1d32]" style={{ 'fontSize': '1.2rem', 'lineHeight': '0.9' }}>{country.code}</h6>
-                <img alt={country.name} src={`assets/flags/${country.code?.toLowerCase()}.svg`} className='w-100' style={{ 'padding': '0.1rem' }} draggable={false} />
+        <div className="w-96 text-center p-4">
+          {/* <button
+            onClick={() => {
+              saveAsPng(contentToDownload, { filename: 'Figurita', printDate: false });
+            }}
+          >
+            Descargar imágen
+          </button> */}
+          <h1 className="text-center font-semibold text-xl pb-2">Previsualización</h1>
+          <hr />
+          <div className="border-2 border-gray-900 bg-[#d53618] p-5 relative mt-2" id="div-to-download">
+            <div className="flex justify-between">
+              <div>
+                <img alt="logo-qatar" src={`assets/qatar-logo.png`} style={{ 'width': '6rem' }} draggable={false} />
+                <h6>Cancha</h6>
               </div>
-              <h6 className="font-bold text-white">{nationalTeamDebutDate}</h6>
-              <div className="flex gap-2 mt-2">
-                <div className="flex flex-col items-center">
-                  <div className="h-8">
-                    <img alt='height' src={`assets/height.png`} className='w-8' style={{ 'filter': 'invert(1)' }} draggable={false} />
-                  </div>
-                  <h6 className="font-bold text-white">{height}</h6>
+              <div>
+                <div className="bg-white">
+                  <h6 className="font-extrabold text-[#7a1d32]" style={{ 'fontSize': '1.2rem', 'lineHeight': '0.9' }}>{country.alpha3}</h6>
+                  <img alt={country.name} src={`assets/flags/${country.alpha2?.toLowerCase()}.svg`} className='w-100' style={{ 'padding': '0.1rem' }} draggable={false} />
                 </div>
-                <div className="flex flex-col items-center">
-                  <div className="h-8">
-                    <img alt='height' src={`assets/weight.png`} className='w-6' style={{ 'filter': 'invert(1)', 'marginTop': '0.2rem' }} draggable={false} />
+                <h6 className="font-bold text-white mt-2">{nationalTeamDebutDate}</h6>
+                <div className="flex gap-2 mt-4">
+                  <div className="flex flex-col items-center">
+                    <div className="h-8">
+                      <img alt='height' src={`assets/height.png`} className='w-8' style={{ 'filter': 'invert(1)' }} draggable={false} />
+                    </div>
+                    <h6 className="font-bold text-white">{height}</h6>
                   </div>
-                  <h6 className="font-bold text-white">{weight}</h6>
+                  <div className="flex flex-col items-center">
+                    <div className="h-8">
+                      <img alt='height' src={`assets/weight.png`} className='w-6' style={{ 'filter': 'invert(1)', 'marginTop': '0.2rem' }} draggable={false} />
+                    </div>
+                    <h6 className="font-bold text-white">{weight}</h6>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div style={{ 'width': '200px', 'height': '200px', 'marginBottom': '-1.5rem' }}>
-            <div className="absolute top-4 left-0">
-              <img src="https://www.pngkey.com/png/full/161-1619094_lionel-messi-fue-seleccionado-como-el-mximo-goleador.png" style={{ 'clipPath': 'polygon(8% 54%, 33% 27%, 33% 0, 68% 0, 68% 27%, 93% 54%, 93% 96%, 8% 96%)', 'width': '350px', 'maxWidth': '350px', 'height': '350px', 'marginLeft': '-0.2rem', 'filter': 'drop-shadow(10px 5px 1px #222)' }}></img>
+            <div style={{ 'width': '200px', 'height': '200px', 'marginBottom': '-1.5rem' }}>
+              <div className="absolute top-4 left-0">
+                {/* <img src="https://www.pngkey.com/png/full/161-1619094_lionel-messi-fue-seleccionado-como-el-mximo-goleador.png" style={{ 'clipPath': 'polygon(8% 54%, 33% 27%, 33% 0, 68% 0, 68% 27%, 93% 54%, 93% 96%, 8% 96%)', 'width': '350px', 'maxWidth': '350px', 'height': '350px', 'marginLeft': '-0.2rem', 'filter': 'drop-shadow(10px 5px 1px #222)' }}></img> */}
+              </div>
             </div>
-          </div>
-          <div className="flex flex-col gap-2">
-            <div className="bg-[#e8e2d2]">
-              <h6 className="text-xl font-extrabold text-[#7a1d32]" style={{ 'boxShadow': '0px 8px 3px 0px' }}>{name}</h6>
-            </div>
-            <div className="flex justify-center items-center -mt-2">
-              <div className="bg-[#7a1d32] w-fit px-5 relative">
-                <div className="bg-[#7a1d32] w-3 h-2 absolute" style={{ 'top': '0.6rem', 'left': '-0.7rem' }}></div>
-                <h6 className="font-bold text-sm py-1 text-[#e8e2d2]">{dateOfBirth}</h6>
-                <div className="bg-[#7a1d32] w-3 h-2 absolute" style={{ 'top': '0.6rem', 'right': '-0.7rem' }}></div>
+            <div className="flex flex-col gap-2">
+              <div className="bg-[#e8e2d2]">
+                <h6 className="text-xl font-extrabold text-[#7a1d32]" style={{ 'boxShadow': '0px 8px 3px 0px' }}>{name}</h6>
+              </div>
+              <div className="flex justify-center items-center -mt-2">
+                <div className="bg-[#7a1d32] w-fit px-5 relative">
+                  <div className="bg-[#7a1d32] w-3 h-2 absolute" style={{ 'top': '0.6rem', 'left': '-0.7rem' }}></div>
+                  <h6 className="font-bold text-sm py-1 text-[#e8e2d2]">{dateOfBirth}</h6>
+                  <div className="bg-[#7a1d32] w-3 h-2 absolute" style={{ 'top': '0.6rem', 'right': '-0.7rem' }}></div>
+                </div>
               </div>
             </div>
           </div>
