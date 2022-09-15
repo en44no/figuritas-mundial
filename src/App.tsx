@@ -1483,48 +1483,58 @@ const App = () => {
           </button> */}
           <h1 className="text-center font-semibold text-xl pb-2">Previsualización</h1>
           <hr />
-          <div className="border-2 border-gray-900 bg-[#d53618] p-5 relative mt-2" id="div-to-download">
-            <div className="flex justify-between">
-              <div>
-                <img alt="logo-qatar" src={`assets/qatar-logo.png`} style={{ 'width': '6rem' }} draggable={false} />
-                <h6>Cancha</h6>
-              </div>
-              <div>
-                <div className="bg-white">
-                  <h6 className="font-extrabold text-[#7a1d32]" style={{ 'fontSize': '1.2rem', 'lineHeight': '0.9' }}>{country.alpha3}</h6>
-                  <img alt={country.name} src={`assets/flags/${country.alpha2?.toLowerCase()}.svg`} className='w-100' style={{ 'padding': '0.1rem' }} draggable={false} />
+          <div className="flex justify-center items-center mt-6">
+            <div className="shadow-lg w-full bg-[#d53618] p-5 relative mt-2" id="div-to-download" style={{ 'background': 'linear-gradient(90deg, rgba(234,134,45,1) 2%, rgba(222,80,42,1) 50%, rgba(234,134,45,1) 98%)' }}>
+              <div className="flex justify-between">
+                <div>
+                  <img alt="logo-qatar" src={`assets/qatar-logo.png`} style={{ 'width': '6rem' }} draggable={false} />
+                  <h6>Cancha</h6>
                 </div>
-                <h6 className="font-bold text-white mt-2">{nationalTeamDebutDate}</h6>
-                <div className="flex gap-2 mt-4">
-                  <div className="flex flex-col items-center">
-                    <div className="h-8">
-                      <img alt='height' src={`assets/height.png`} className='w-8' style={{ 'filter': 'invert(1)' }} draggable={false} />
-                    </div>
-                    <h6 className="font-bold text-white">{height}</h6>
+                <div>
+                  <div className="bg-white">
+                    <h6 className="font-extrabold text-[#7a1d32]" style={{ 'fontSize': '1.2rem', 'lineHeight': '0.9' }}>{country.alpha3}</h6>
+                    <img alt={country.name} src={`assets/flags/${country.alpha2?.toLowerCase()}.svg`} className='w-100' style={{ 'padding': '0.1rem' }} draggable={false} />
                   </div>
-                  <div className="flex flex-col items-center">
-                    <div className="h-8">
-                      <img alt='height' src={`assets/weight.png`} className='w-6' style={{ 'filter': 'invert(1)', 'marginTop': '0.2rem' }} draggable={false} />
+                  <h6 className="font-bold text-white mt-2">{nationalTeamDebutDate}</h6>
+                  <div className="flex gap-2 mt-4">
+                    <div className="flex flex-col items-center">
+                      <div className="h-8">
+                        <img alt='height' src={`assets/height.png`} className='w-8' style={{ 'filter': 'invert(1)' }} draggable={false} />
+                      </div>
+                      <h6 className="font-bold text-white">{height}</h6>
                     </div>
-                    <h6 className="font-bold text-white">{weight}</h6>
+                    <div className="flex flex-col items-center">
+                      <div className="h-8">
+                        <img alt='height' src={`assets/weight.png`} className='w-6' style={{ 'filter': 'invert(1)', 'marginTop': '0.2rem' }} draggable={false} />
+                      </div>
+                      <h6 className="font-bold text-white">{weight}</h6>
+                    </div>
                   </div>
                 </div>
               </div>
-            </div>
-            <div style={{ 'width': '200px', 'height': '200px', 'marginBottom': '-1.5rem' }}>
-              <div className="absolute top-4 left-0">
-                {/* <img src="https://www.pngkey.com/png/full/161-1619094_lionel-messi-fue-seleccionado-como-el-mximo-goleador.png" style={{ 'clipPath': 'polygon(8% 54%, 33% 27%, 33% 0, 68% 0, 68% 27%, 93% 54%, 93% 96%, 8% 96%)', 'width': '350px', 'maxWidth': '350px', 'height': '350px', 'marginLeft': '-0.2rem', 'filter': 'drop-shadow(10px 5px 1px #222)' }}></img> */}
+              <div style={{ 'width': '200px', 'height': '200px', 'marginBottom': '-1.5rem' }}>
+                <div className="absolute top-4 left-0">
+                  {/* <img src="https://www.pngkey.com/png/full/161-1619094_lionel-messi-fue-seleccionado-como-el-mximo-goleador.png" style={{ 'clipPath': 'polygon(8% 54%, 33% 27%, 33% 0, 68% 0, 68% 27%, 93% 54%, 93% 96%, 8% 96%)', 'width': '350px', 'maxWidth': '350px', 'height': '350px', 'marginLeft': '-0.2rem', 'filter': 'drop-shadow(10px 5px 1px #222)' }}></img> */}
+                </div>
               </div>
-            </div>
-            <div className="flex flex-col gap-2">
-              <div className="bg-[#e8e2d2]">
-                <h6 className="text-xl font-extrabold text-[#7a1d32]" style={{ 'boxShadow': '0px 8px 3px 0px' }}>{name}</h6>
-              </div>
-              <div className="flex justify-center items-center -mt-2">
-                <div className="bg-[#7a1d32] w-fit px-5 relative">
-                  <div className="bg-[#7a1d32] w-3 h-2 absolute" style={{ 'top': '0.6rem', 'left': '-0.7rem' }}></div>
-                  <h6 className="font-bold text-sm py-1 text-[#e8e2d2]">{dateOfBirth}</h6>
-                  <div className="bg-[#7a1d32] w-3 h-2 absolute" style={{ 'top': '0.6rem', 'right': '-0.7rem' }}></div>
+              <div className="flex flex-col gap-2 px-5">
+                <div className="bg-[#e8e2d2] relative">
+                  <div className="bg-[#e8e2d2] w-2 h-5 absolute" style={{ 'top': '0.6rem', 'left': '-0.5rem' }}></div>
+                  <div className="bg-[#e8e2d2] w-7 h-2 absolute" style={{ 'top': '0.95rem', 'left': '-1.5rem' }}></div>
+                  <div className="bg-[#e8e2d2] w-2 absolute" style={{ 'top': '0.15rem', 'left': '-1.1rem', 'height': '0.40rem', 'width': '0.40rem' }}></div>
+                  <div className="bg-[#e8e2d2] w-2 absolute" style={{ 'top': '1.9rem', 'left': '-1.1rem', 'height': '0.40rem', 'width': '0.40rem' }}></div>
+                  <h6 className="text-3xl font-extrabold text-[#7a1d32]" style={{ 'boxShadow': '0px 8px 3px 0px', 'lineHeight': '1.3' }}>{name}</h6>
+                  <div className="bg-[#e8e2d2] w-2 h-5 absolute" style={{ 'top': '0.6rem', 'right': '-0.5rem' }}></div>
+                  <div className="bg-[#e8e2d2] w-7 h-2 absolute" style={{ 'top': '0.95rem', 'right': '-1.5rem' }}></div>
+                  <div className="bg-[#e8e2d2] w-2 absolute" style={{ 'top': '0.15rem', 'right': '-1.1rem', 'height': '0.40rem', 'width': '0.40rem' }}></div>
+                  <div className="bg-[#e8e2d2] w-2 absolute" style={{ 'top': '1.9rem', 'right': '-1.1rem', 'height': '0.40rem', 'width': '0.40rem' }}></div>
+                </div>
+                <div className="flex justify-center items-center -mt-2">
+                  <div className="bg-[#7a1d32] w-fit px-5 relative">
+                    <div className="bg-[#7a1d32] w-3 h-2 absolute" style={{ 'top': '0.6rem', 'left': '-0.7rem' }}></div>
+                    <h6 className="font-bold text-sm py-1 text-[#e8e2d2]">{dateOfBirth}</h6>
+                    <div className="bg-[#7a1d32] w-3 h-2 absolute" style={{ 'top': '0.6rem', 'right': '-0.7rem' }}></div>
+                  </div>
                 </div>
               </div>
             </div>
