@@ -1614,7 +1614,7 @@ const App = () => {
                   <img alt="logo-qatar" src={`assets/qatar-logo.png`} style={{ 'width': '6rem' }} draggable={false} />
                   {courtPosition && (
                     <div className="h-8 flex justify-center items-center mt-[1.7rem]">
-                      <img alt='height' src={`assets/field/${courtPosition.code}.png`} className='w-12' draggable={false} />
+                      <img alt={courtPosition.code} src={`assets/field/${courtPosition.code?.toLowerCase()}.png`} className='w-12' draggable={false} />
                     </div>
                   )}
                 </div>
