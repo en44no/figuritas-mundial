@@ -127,3 +127,31 @@
 .p-dropdown .p-dropdown-label.p-placeholder {
   color: #adaeaf;
 }
+
+.p-slider.p-slider-horizontal {
+  cursor: pointer;
+}
+
+.p-selectbutton .p-button.p-highlight {
+  padding: 0.5rem !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+.p-buttonset .p-button {
+  padding: 0.5rem !important;
+  padding-left: 1rem !important;
+  padding-right: 1rem !important;
+}
+
+.p-selectbutton .p-button.p-highlight {
+  background: #7a1d32;
+  border-color: #7a1d32;
+  color: #ffffff;
+}
+
+.p-selectbutton .p-button.p-highlight:hover {
+  background: #7a1d32;
+  border-color: #7a1d32;
+  color: #ffffff;
+}

@@ -9,6 +9,7 @@ import 'primereact/resources/primereact.css';
 import { saveAsPng } from 'save-html-as-image';
 import { TabView, TabPanel } from 'primereact/tabview';
 import { Slider } from 'primereact/slider';
+import { SelectButton } from 'primereact/selectbutton';
 
 const App = () => {
   const [name, setName] = useState('');
@@ -20,8 +21,11 @@ const App = () => {
   const [courtPosition, setCourtPosition] = useState<any>();
   const [activeIndex, setActiveIndex] = useState(0);
   const [selectedImage, setSelectedImage] = useState<any>(null);
-  const [photoHorizontalPosition, setPhotoHorizontalPosition] = useState<any>('auto');
-  const [photoVerticalPosition, setPhotoVerticalPosition] = useState<any>('auto');
+  const [photoHorizontalPosition, setPhotoHorizontalPosition] = useState<any>(0);
+  const [photoVerticalPosition, setPhotoVerticalPosition] = useState<any>(0);
+  const [photoWidth, setPhotoWidth] = useState<any>(370);
+  const [photoHeight, setPhotoHeight] = useState<any>(420);
+  const [stickerVariant, setStickerVariant] = useState<any>('orange');
 
   let contentToDownload = document.getElementById("div-to-download");
 
@@ -1416,6 +1420,7 @@ const App = () => {
 
   useEffect(() => {
     onCountryChange(countries.find(country => country.alpha2 == 'UY'));
+    setCourtPosition({ name: 'Delantero', code: 'Forward' })
   }, [])
 
   const onCountryChange = (e: any) => {
@@ -1442,6 +1447,26 @@ const App = () => {
     );
   }
 
+  const selectedCourtPositionTemplate = (option: any) => {
+    if (option) {
+      return (
+        <div className="flex gap-3 items-center">
+          <img alt={option.name} src={`assets/field/${option.code.toLowerCase()}.png`} className='w-5 rotate-90' draggable={false} />
+          <div className='font-normal text-md leading-normal text-[#495057]'>{option.name}</div>
+        </div>
+      );
+    }
+  }
+
+  const courtPositionOptionTemplate = (option: any) => {
+    return (
+      <div className="flex gap-3 items-center">
+        <img alt={option.name} src={`assets/field/${option.code.toLowerCase()}.png`} className='w-5 rotate-90' draggable={false} />
+        <div className='font-medium text-sm'>{option.name}</div>
+      </div>
+    );
+  }
+
   const onImageSelected = (image: any) => {
     setSelectedImage(image);
     setPhotoHorizontalPosition(0);
@@ -1453,6 +1478,11 @@ const App = () => {
     { name: 'Defensa', code: 'Defender' },
     { name: 'Mediocampista', code: 'Midfielder' },
     { name: 'Delantero', code: 'Forward' }
+  ];
+
+  const stickerVariants = [
+    { name: 'orange', code: 'orange' },
+    { name: 'blue', code: 'blue' },
   ];
 
   return (
@@ -1491,13 +1521,14 @@ const App = () => {
                 </div>
                 <div className="flex flex-col gap-1">
                   <label className="text-left font-semibold text-sm">Posición en la cancha</label>
-                  <Dropdown value={courtPosition} options={courtPositions} onChange={(e) => setCourtPosition(e.value)} optionLabel='name' className='w-100 flex items-center rounded-lg border-none bg-[#f8f9fa] active:!shadow-none h-10 text-left' placeholder="Selecciona una posición" />
+                  <Dropdown value={courtPosition} options={courtPositions} onChange={(e) => setCourtPosition(e.value)} optionLabel="name" className='w-100 flex items-center rounded-lg border-none bg-[#f8f9fa] active:!shadow-none h-10 text-left' placeholder="Selecciona una posición"
+                    valueTemplate={selectedCourtPositionTemplate} itemTemplate={courtPositionOptionTemplate} />
                 </div>
               </div>
             </TabPanel>
             <TabPanel header="Imagen">
               <div className="w-full flex flex-col gap-2">
-                <div className="w-full flex gap-2">
+                <div className="w-full flex gap-2 mt-2">
                   <div className="primary-button" style={{ 'maxWidth': '85%' }}>
                     <div className="flex items-center text-white font-semibold justify-center" style={{ 'width': 'inherit' }}>
                       <span className={selectedImage && 'selected-image-name'}>{selectedImage ? selectedImage.name : 'Subir imagen'}</span>
@@ -1514,7 +1545,7 @@ const App = () => {
                       <div className="flex flex-col gap-1">
                         <div className="flex justify-between">
                           <label className="text-left font-semibold text-sm">Posición horizontal</label>
-                          <label className="text-left text-sm text-[#7a1d32] font-bold">{photoHorizontalPosition}</label>
+                          <label className="text-left text-sm text-[#7a1d32] font-bold">{photoHorizontalPosition}px</label>
                         </div>
                         <div className='bg-[#f8f9fa] p-2 rounded-lg'>
                           <Slider value={photoHorizontalPosition} style={{ 'width': '100%', 'marginTop': '0.5rem', 'marginBottom': '0.5rem' }} onChange={(e) => setPhotoHorizontalPosition(e.value)} min={-30} max={30} />
@@ -1525,15 +1556,50 @@ const App = () => {
                       <div className="flex flex-col gap-1">
                         <div className="flex justify-between">
                           <label className="text-left font-semibold text-sm">Posición vertical</label>
-                          <label className="text-left text-sm text-[#7a1d32] font-bold">{photoVerticalPosition}</label>
+                          <label className="text-left text-sm text-[#7a1d32] font-bold">{photoVerticalPosition}px</label>
                         </div>
                         <div className='bg-[#f8f9fa] p-2 rounded-lg'>
                           <Slider value={photoVerticalPosition} style={{ 'width': '100%', 'marginTop': '0.5rem', 'marginBottom': '0.5rem' }} onChange={(e) => setPhotoVerticalPosition(e.value)} min={-30} max={30} />
                         </div>
                       </div>
                     </div>
+                    <div>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex justify-between">
+                          <label className="text-left font-semibold text-sm">Ancho</label>
+                          <label className="text-left text-sm text-[#7a1d32] font-bold">{photoWidth}px</label>
+                        </div>
+                        <div className='bg-[#f8f9fa] p-2 rounded-lg'>
+                          <Slider value={photoWidth} style={{ 'width': '100%', 'marginTop': '0.5rem', 'marginBottom': '0.5rem' }} onChange={(e) => setPhotoWidth(e.value)} min={340} max={400} />
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex justify-between">
+                          <label className="text-left font-semibold text-sm">Largo</label>
+                          <label className="text-left text-sm text-[#7a1d32] font-bold">{photoHeight}px</label>
+                        </div>
+                        <div className='bg-[#f8f9fa] p-2 rounded-lg'>
+                          <Slider value={photoHeight} style={{ 'width': '100%', 'marginTop': '0.5rem', 'marginBottom': '0.5rem' }} onChange={(e) => setPhotoHeight(e.value)} min={390} max={450} />
+                        </div>
+                      </div>
+                    </div>
                   </>
                 )}
+              </div>
+            </TabPanel>
+            <TabPanel header="Figurita">
+              <div className="w-full flex flex-col gap-2 mt-3">
+                <div className="flex flex-col gap-1">
+                  <label className="text-left font-semibold text-sm">Color de fondo</label>
+                  <div className='w-100 flex items-center rounded-lg border-none bg-[#f8f9fa] active:!shadow-none h-10 px-4'>
+                    <div className="flex gap-2 items-center">
+                      <div className="w-6 h-6 rounded-full cursor-pointer" onClick={() => setStickerVariant('orange')} style={{ 'background': 'linear-gradient(0deg, rgba(234,134,45,1) 2%, rgba(222,80,42,1) 50%, rgba(234,134,45,1) 98%)', 'border': '1px solid #7a1d32' }}></div>
+                      <div className="w-6 h-6 rounded-full cursor-pointer" onClick={() => setStickerVariant('blue')} style={{ 'background': 'linear-gradient(0deg, rgba(90,172,183,1) 2%, rgba(104,94,165,1) 50%, rgba(90,172,183,1) 98%)', 'border': '1px solid #7a1d32' }}></div>
+                    </div>
+                  </div>
+                </div>
               </div>
             </TabPanel>
           </TabView>
@@ -1542,7 +1608,7 @@ const App = () => {
           <h1 className="text-center font-semibold text-xl pb-2">Previsualización</h1>
           <hr />
           <div className="flex flex-col justify-center items-center bg-red h-full -mt-7">
-            <div className="shadow-lg w-full bg-[#d53618] p-5 relative mt-6" id="div-to-download" style={{ 'background': 'linear-gradient(90deg, rgba(234,134,45,1) 2%, rgba(222,80,42,1) 50%, rgba(234,134,45,1) 98%)', 'minHeight': '33rem', 'width': '26rem' }}>
+            <div className="shadow-lg w-full p-5 relative mt-6" id="div-to-download" style={{ 'background': stickerVariant == 'orange' ? 'linear-gradient(0deg, rgba(234,134,45,1) 2%, rgba(222,80,42,1) 50%, rgba(234,134,45,1) 98%)' : 'linear-gradient(0deg, rgba(90,172,183,1) 2%, rgba(104,94,165,1) 50%, rgba(90,172,183,1) 98%)', 'minHeight': '33rem', 'width': '26rem' }}>
               <div className="flex justify-between">
                 <div>
                   <img alt="logo-qatar" src={`assets/qatar-logo.png`} style={{ 'width': '6rem' }} draggable={false} />
@@ -1559,7 +1625,7 @@ const App = () => {
                       <img alt={country.name} src={`assets/flags/${country.alpha2?.toLowerCase()}.svg`} className='w-100' style={{ 'padding': '0.1rem' }} draggable={false} />
                     </div>
                   )}
-                  <h6 className="font-bold text-white mt-2">{nationalTeamDebutDate}</h6>
+                  <h6 className="font-bold text-white mt-1">{nationalTeamDebutDate}</h6>
                   <div className="flex gap-2 mt-4">
                     {height && (
                       <div className="flex flex-col items-center">
@@ -1583,7 +1649,7 @@ const App = () => {
               {selectedImage && (
                 <div style={{ 'width': '200px', 'height': '200px', 'marginBottom': '-1.5rem' }}>
                   <div className="absolute top-14 left-6">
-                    <img src={selectedImage && URL.createObjectURL(selectedImage)} style={{ 'clipPath': 'polygon(8% 54%, 33% 27%, 33% 0, 68% 0, 68% 27%, 93% 54%, 93% 96%, 8% 96%)', 'width': '370px', 'maxWidth': '370px', 'height': '420px', 'filter': 'drop-shadow(-5px -1px 0 #e8e2d2) drop-shadow(6px -1px 0 #e8e2d2)', 'marginLeft': photoHorizontalPosition, 'marginTop': photoVerticalPosition, 'padding': '2rem' }}></img>
+                    <img src={selectedImage && URL.createObjectURL(selectedImage)} style={{ 'clipPath': 'polygon(8% 54%, 33% 27%, 33% 0, 68% 0, 68% 27%, 93% 54%, 93% 96%, 8% 96%)', 'width': photoWidth, 'maxWidth': photoWidth, 'height': photoHeight, 'filter': 'drop-shadow(-5px -1px 0 #e8e2d2) drop-shadow(6px -1px 0 #e8e2d2)', 'marginLeft': photoHorizontalPosition, 'marginTop': photoVerticalPosition, 'padding': '2rem' }}></img>
                   </div>
                 </div>
               )}
