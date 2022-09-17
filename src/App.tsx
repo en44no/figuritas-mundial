@@ -1451,7 +1451,7 @@ const App = () => {
     if (option) {
       return (
         <div className="flex gap-3 items-center">
-          <img alt={option.name} src={`assets/field/${option.code.toLowerCase()}.png`} className='w-5 rotate-90' draggable={false} />
+          <img alt={option.name} src={`assets/field/${option.code?.toLowerCase()}.png`} className='w-5 rotate-90' draggable={false} />
           <div className='font-normal text-md leading-normal text-[#495057]'>{option.name}</div>
         </div>
       );
@@ -1461,7 +1461,7 @@ const App = () => {
   const courtPositionOptionTemplate = (option: any) => {
     return (
       <div className="flex gap-3 items-center">
-        <img alt={option.name} src={`assets/field/${option.code.toLowerCase()}.png`} className='w-5 rotate-90' draggable={false} />
+        <img alt={option.name} src={`assets/field/${option.code?.toLowerCase()}.png`} className='w-5 rotate-90' draggable={false} />
         <div className='font-medium text-sm'>{option.name}</div>
       </div>
     );
