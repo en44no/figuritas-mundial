@@ -1,3 +1,129 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.primary-button {
+  background-color: #7a1d32 !important;
+  width: 100% !important;
+  height: 2.5rem !important;
+  margin-top: 0.5rem !important;
+  border: none !important;
+  display: flex !important;
+  justify-content: center !important;
+  gap: 0.7rem !important;
+  font-size: 0.9rem !important;
+  cursor: pointer !important;
+  border-radius: 7px !important;
+  position: relative !important;
+}
+
+.primary-button:hover {
+  background-color: #86394b !important;
+}
+
+.p-button-label {
+  flex: none !important;
+  font-weight: 600;
+}
+
+.remove-button {
+  background-color: rgb(198, 31, 31) !important;
+  height: 2.5rem !important;
+  border: none !important;
+  display: flex !important;
+  margin-top: 0.5rem !important;
+  font-size: 0.9rem !important;
+}
+
+.remove-button:hover {
+  background-color: rgb(214, 54, 54) !important;
+}
+
+.p-disabled,
+.p-disabled * {
+  cursor: not-allowed !important;
+}
+
+.p-tabview .p-tabview-nav {
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  font-weight: normal;
+  font-size: 0.9rem;
+  border: none;
+  margin-top: 0.5rem;
+}
+
+.p-tabview .p-tabview-nav li .p-tabview-nav-link:not(.p-disabled):focus {
+  box-shadow: none;
+}
+
+.p-tabview .p-tabview-panels {
+  min-height: 34.25rem;
+  padding: 0.5rem;
+}
+
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+  background: #ffffff;
+  border-color: #7a1d32;
+  color: #7a1d32;
+}
+
+.p-tabview .p-tabview-nav .p-tabview-ink-bar {
+  background-color: #7a1d32;
+}
+
+.p-fileupload-content>.p-progressbar {
+  display: none;
+}
+
+.p-fileupload .p-fileupload-content {
+  padding: 0;
+}
+
+.p-fileupload .p-fileupload-buttonbar {
+  padding: 1rem;
+}
+
+.p-fileupload {
+  width: 100%;
+}
+
+.fileInput {
+  cursor: pointer;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 99;
+  font-size: 50px;
+  opacity: 0;
+  -moz-opacity: 0;
+  filter: progid:DXImageTransform.Microsoft.Alpha(opacity=0)
+}
+
+.selected-image-name {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  white-space: nowrap;
+  padding-left: 1rem;
+  padding-right: 1rem;
+}
+
+.p-slider .p-slider-range {
+  background: #7a1d32;
+}
+
+.p-slider .p-slider-handle {
+  background: #7a1d32;
+  border: 2px solid #7a1d32;
+}
+
+.p-slider:not(.p-disabled) .p-slider-handle:hover {
+  background: #7a1d32;
+  border-color: #7a1d32;
+}
+
+.p-dropdown .p-dropdown-label.p-placeholder {
+  color: #adaeaf;
+}

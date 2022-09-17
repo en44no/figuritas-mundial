@@ -1,11 +1,14 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Dropdown } from 'primereact/dropdown';
+import { Button } from 'primereact/button';
 import { InputMask } from 'primereact/inputmask';
 import 'primeicons/primeicons.css';
 import 'primereact/resources/themes/lara-light-indigo/theme.css';
 import 'primereact/resources/primereact.css';
 // @ts-ignore
-import { saveAsPng, saveAsJpeg } from 'save-html-as-image';
+import { saveAsPng } from 'save-html-as-image';
+import { TabView, TabPanel } from 'primereact/tabview';
+import { Slider } from 'primereact/slider';
 
 const App = () => {
   const [name, setName] = useState('');
@@ -14,7 +17,11 @@ const App = () => {
   const [nationalTeamDebutDate, setNationalTeamDebutDate] = useState('');
   const [height, setHeight] = useState('');
   const [weight, setWeight] = useState('');
-  const [courtPosition, setCourtPosition] = useState('');
+  const [courtPosition, setCourtPosition] = useState<any>();
+  const [activeIndex, setActiveIndex] = useState(0);
+  const [selectedImage, setSelectedImage] = useState<any>(null);
+  const [photoHorizontalPosition, setPhotoHorizontalPosition] = useState<any>('auto');
+  const [photoVerticalPosition, setPhotoVerticalPosition] = useState<any>('auto');
 
   let contentToDownload = document.getElementById("div-to-download");
 
@@ -1408,7 +1415,7 @@ const App = () => {
   ];
 
   useEffect(() => {
-    onCountryChange(countries.find(country => country.alpha2 == 'AR'));
+    onCountryChange(countries.find(country => country.alpha2 == 'UY'));
   }, [])
 
   const onCountryChange = (e: any) => {
@@ -1420,7 +1427,7 @@ const App = () => {
       return (
         <div className="flex gap-2">
           <img alt={option.name} src={`assets/flags/${option.alpha2.toLowerCase()}.svg`} className='w-6' draggable={false} />
-          <div className='font-normal text-md leading-normal text-black'>{option.name}</div>
+          <div className='font-normal text-md leading-normal text-[#495057]'>{option.name}</div>
         </div>
       );
     }
@@ -1435,108 +1442,178 @@ const App = () => {
     );
   }
 
+  const onImageSelected = (image: any) => {
+    setSelectedImage(image);
+    setPhotoHorizontalPosition(0);
+    setPhotoVerticalPosition(0);
+  }
+
+  const courtPositions = [
+    { name: 'Golero', code: 'Goalkeeper' },
+    { name: 'Defensa', code: 'Defender' },
+    { name: 'Mediocampista', code: 'Midfielder' },
+    { name: 'Delantero', code: 'Forward' }
+  ];
+
   return (
     <div className="w-screen h-screen flex justify-center items-center">
       <div className="flex rounded-lg shadow-lg border-2">
         <div className="w-96 text-center p-4 border-r-2">
           <h1 className="text-center font-semibold text-xl pb-2">Ajustes</h1>
           <hr />
-          <div className="flex flex-col gap-2 mt-2">
-            <div className="flex flex-col gap-2">
-              <label className="text-left font-semibold text-sm">Nombre</label>
-              <input value={name} onChange={(e) => setName(e.target.value.toUpperCase())} placeholder="Lionel Messi" className="bg-[#f8f9fa] p-2 rounded-lg" />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-left font-semibold text-sm">Fecha de nacimiento</label>
-              <InputMask mask="99/99/9999" placeholder="24/06/1987" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-left font-semibold text-sm">Pais</label>
-              <Dropdown emptyFilterMessage='No se encontró un país con ese nombre' resetFilterOnHide showFilterClear className='w-100 flex items-center rounded-lg border-none bg-[#f8f9fa] active:!shadow-none h-10' value={country} options={countries} onChange={(e: any) => onCountryChange(e.value)} optionLabel="name" filter filterBy="name" placeholder="Pais"
-                valueTemplate={selectedCountryTemplate} itemTemplate={countryOptionTemplate} />
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-left font-semibold text-sm">Debut en la seleccion</label>
-              <InputMask mask="9999" placeholder="2005" value={nationalTeamDebutDate} onChange={(e) => setNationalTeamDebutDate(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-left font-semibold text-sm">Altura</label>
-              <InputMask mask="9,99" placeholder="1,70" value={height} onChange={(e) => setHeight(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-left font-semibold text-sm">Peso</label>
-              <InputMask mask="99?9" placeholder="72" value={weight} onChange={(e) => setWeight(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
-            </div>
-            <div className="flex flex-col gap-1">
-              <label className="text-left font-semibold text-sm">Posición en la cancha</label>
-              <InputMask mask="99?9" placeholder="72" value={courtPosition} onChange={(e) => setCourtPosition(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
-            </div>
-          </div>
+          <TabView activeIndex={activeIndex} onTabChange={(e) => setActiveIndex(e.index)}>
+            <TabPanel header="Datos">
+              <div className="flex flex-col gap-2 mt-2">
+                <div className="flex flex-col gap-2">
+                  <label className="text-left font-semibold text-sm">Nombre</label>
+                  <input value={name} onChange={(e) => setName(e.target.value.toUpperCase())} placeholder="Lionel Messi" className="bg-[#f8f9fa] p-2 rounded-lg" />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-left font-semibold text-sm">Fecha de nacimiento</label>
+                  <InputMask mask="99/99/9999" placeholder="24/06/1987" value={dateOfBirth} onChange={(e) => setDateOfBirth(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-left font-semibold text-sm">País</label>
+                  <Dropdown emptyFilterMessage='No se encontró un país con ese nombre' placeholder="Selecciona un país" resetFilterOnHide showFilterClear className='w-100 flex items-center rounded-lg border-none bg-[#f8f9fa] active:!shadow-none h-10' value={country} options={countries} onChange={(e: any) => onCountryChange(e.value)} optionLabel="name" filter filterBy="name"
+                    valueTemplate={selectedCountryTemplate} itemTemplate={countryOptionTemplate} />
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-left font-semibold text-sm">Debut en la selección</label>
+                  <InputMask mask="9999" placeholder="2005" value={nationalTeamDebutDate} onChange={(e) => setNationalTeamDebutDate(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-left font-semibold text-sm">Altura</label>
+                  <InputMask mask="9,99" placeholder="1,70" value={height} onChange={(e) => setHeight(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-left font-semibold text-sm">Peso</label>
+                  <InputMask mask="99?9" placeholder="72" value={weight} onChange={(e) => setWeight(e.value)} className="bg-[#f8f9fa] p-2 rounded-lg border-none"></InputMask>
+                </div>
+                <div className="flex flex-col gap-1">
+                  <label className="text-left font-semibold text-sm">Posición en la cancha</label>
+                  <Dropdown value={courtPosition} options={courtPositions} onChange={(e) => setCourtPosition(e.value)} optionLabel='name' className='w-100 flex items-center rounded-lg border-none bg-[#f8f9fa] active:!shadow-none h-10 text-left' placeholder="Selecciona una posición" />
+                </div>
+              </div>
+            </TabPanel>
+            <TabPanel header="Imagen">
+              <div className="w-full flex flex-col gap-2">
+                <div className="w-full flex gap-2">
+                  <div className="primary-button" style={{ 'maxWidth': '85%' }}>
+                    <div className="flex items-center text-white font-semibold justify-center" style={{ 'width': 'inherit' }}>
+                      <span className={selectedImage && 'selected-image-name'}>{selectedImage ? selectedImage.name : 'Subir imagen'}</span>
+                    </div>
+                    <input className="fileInput" type="file" onChange={(event) => {
+                      event!.target!.files![0] && onImageSelected(event!.target!.files![0]);
+                    }} />
+                  </div>
+                  <Button icon="pi pi-times" disabled={!selectedImage} className="remove-button" onClick={() => setSelectedImage(null)} />
+                </div>
+                {selectedImage && (
+                  <>
+                    <div className="mt-3">
+                      <div className="flex flex-col gap-1">
+                        <div className="flex justify-between">
+                          <label className="text-left font-semibold text-sm">Posición horizontal</label>
+                          <label className="text-left text-sm text-[#7a1d32] font-bold">{photoHorizontalPosition}</label>
+                        </div>
+                        <div className='bg-[#f8f9fa] p-2 rounded-lg'>
+                          <Slider value={photoHorizontalPosition} style={{ 'width': '100%', 'marginTop': '0.5rem', 'marginBottom': '0.5rem' }} onChange={(e) => setPhotoHorizontalPosition(e.value)} min={-30} max={30} />
+                        </div>
+                      </div>
+                    </div>
+                    <div>
+                      <div className="flex flex-col gap-1">
+                        <div className="flex justify-between">
+                          <label className="text-left font-semibold text-sm">Posición vertical</label>
+                          <label className="text-left text-sm text-[#7a1d32] font-bold">{photoVerticalPosition}</label>
+                        </div>
+                        <div className='bg-[#f8f9fa] p-2 rounded-lg'>
+                          <Slider value={photoVerticalPosition} style={{ 'width': '100%', 'marginTop': '0.5rem', 'marginBottom': '0.5rem' }} onChange={(e) => setPhotoVerticalPosition(e.value)} min={-30} max={30} />
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                )}
+              </div>
+            </TabPanel>
+          </TabView>
         </div>
-        <div className="w-96 text-center p-4">
-          {/* <button
-            onClick={() => {
-              saveAsPng(contentToDownload, { filename: 'Figurita', printDate: false });
-            }}
-          >
-            Descargar imágen
-          </button> */}
+        <div className="text-center p-4">
           <h1 className="text-center font-semibold text-xl pb-2">Previsualización</h1>
           <hr />
-          <div className="flex justify-center items-center mt-6">
-            <div className="shadow-lg w-full bg-[#d53618] p-5 relative mt-2" id="div-to-download" style={{ 'background': 'linear-gradient(90deg, rgba(234,134,45,1) 2%, rgba(222,80,42,1) 50%, rgba(234,134,45,1) 98%)' }}>
+          <div className="flex flex-col justify-center items-center bg-red h-full -mt-7">
+            <div className="shadow-lg w-full bg-[#d53618] p-5 relative mt-6" id="div-to-download" style={{ 'background': 'linear-gradient(90deg, rgba(234,134,45,1) 2%, rgba(222,80,42,1) 50%, rgba(234,134,45,1) 98%)', 'minHeight': '33rem', 'width': '26rem' }}>
               <div className="flex justify-between">
                 <div>
                   <img alt="logo-qatar" src={`assets/qatar-logo.png`} style={{ 'width': '6rem' }} draggable={false} />
-                  <h6>Cancha</h6>
+                  {courtPosition && (
+                    <div className="h-8 flex justify-center items-center mt-[1.7rem]">
+                      <img alt='height' src={`assets/field/${courtPosition.code}.png`} className='w-12' draggable={false} />
+                    </div>
+                  )}
                 </div>
                 <div>
-                  <div className="bg-white">
-                    <h6 className="font-extrabold text-[#7a1d32]" style={{ 'fontSize': '1.2rem', 'lineHeight': '0.9' }}>{country.alpha3}</h6>
-                    <img alt={country.name} src={`assets/flags/${country.alpha2?.toLowerCase()}.svg`} className='w-100' style={{ 'padding': '0.1rem' }} draggable={false} />
-                  </div>
+                  {country && (
+                    <div className="bg-white" style={{ 'minWidth': '4.5rem' }}>
+                      <h6 className="font-extrabold text-[#7a1d32]" style={{ 'fontSize': '1.2rem', 'lineHeight': '0.9' }}>{country.alpha3}</h6>
+                      <img alt={country.name} src={`assets/flags/${country.alpha2?.toLowerCase()}.svg`} className='w-100' style={{ 'padding': '0.1rem' }} draggable={false} />
+                    </div>
+                  )}
                   <h6 className="font-bold text-white mt-2">{nationalTeamDebutDate}</h6>
                   <div className="flex gap-2 mt-4">
-                    <div className="flex flex-col items-center">
-                      <div className="h-8">
-                        <img alt='height' src={`assets/height.png`} className='w-8' style={{ 'filter': 'invert(1)' }} draggable={false} />
+                    {height && (
+                      <div className="flex flex-col items-center">
+                        <div className="h-8">
+                          <img alt='height' src={`assets/height.png`} className='w-8' style={{ 'filter': 'invert(1)' }} draggable={false} />
+                        </div>
+                        <h6 className="font-bold text-white">{height}</h6>
                       </div>
-                      <h6 className="font-bold text-white">{height}</h6>
-                    </div>
-                    <div className="flex flex-col items-center">
-                      <div className="h-8">
-                        <img alt='height' src={`assets/weight.png`} className='w-6' style={{ 'filter': 'invert(1)', 'marginTop': '0.2rem' }} draggable={false} />
+                    )}
+                    {weight && (
+                      <div className="flex flex-col items-center">
+                        <div className="h-8">
+                          <img alt='height' src={`assets/weight.png`} className='w-6' style={{ 'filter': 'invert(1)', 'marginTop': '0.2rem' }} draggable={false} />
+                        </div>
+                        <h6 className="font-bold text-white">{weight}</h6>
                       </div>
-                      <h6 className="font-bold text-white">{weight}</h6>
-                    </div>
+                    )}
                   </div>
                 </div>
               </div>
-              <div style={{ 'width': '200px', 'height': '200px', 'marginBottom': '-1.5rem' }}>
-                <div className="absolute top-4 left-0">
-                  {/* <img src="https://www.pngkey.com/png/full/161-1619094_lionel-messi-fue-seleccionado-como-el-mximo-goleador.png" style={{ 'clipPath': 'polygon(8% 54%, 33% 27%, 33% 0, 68% 0, 68% 27%, 93% 54%, 93% 96%, 8% 96%)', 'width': '350px', 'maxWidth': '350px', 'height': '350px', 'marginLeft': '-0.2rem', 'filter': 'drop-shadow(10px 5px 1px #222)' }}></img> */}
-                </div>
-              </div>
-              <div className="flex flex-col gap-2 px-5">
-                <div className="bg-[#e8e2d2] relative">
-                  <div className="bg-[#e8e2d2] w-2 h-5 absolute" style={{ 'top': '0.6rem', 'left': '-0.5rem' }}></div>
-                  <div className="bg-[#e8e2d2] w-7 h-2 absolute" style={{ 'top': '0.95rem', 'left': '-1.5rem' }}></div>
-                  <div className="bg-[#e8e2d2] w-2 absolute" style={{ 'top': '0.15rem', 'left': '-1.1rem', 'height': '0.40rem', 'width': '0.40rem' }}></div>
-                  <div className="bg-[#e8e2d2] w-2 absolute" style={{ 'top': '1.9rem', 'left': '-1.1rem', 'height': '0.40rem', 'width': '0.40rem' }}></div>
-                  <h6 className="text-3xl font-extrabold text-[#7a1d32]" style={{ 'boxShadow': '0px 8px 3px 0px', 'lineHeight': '1.3' }}>{name}</h6>
-                  <div className="bg-[#e8e2d2] w-2 h-5 absolute" style={{ 'top': '0.6rem', 'right': '-0.5rem' }}></div>
-                  <div className="bg-[#e8e2d2] w-7 h-2 absolute" style={{ 'top': '0.95rem', 'right': '-1.5rem' }}></div>
-                  <div className="bg-[#e8e2d2] w-2 absolute" style={{ 'top': '0.15rem', 'right': '-1.1rem', 'height': '0.40rem', 'width': '0.40rem' }}></div>
-                  <div className="bg-[#e8e2d2] w-2 absolute" style={{ 'top': '1.9rem', 'right': '-1.1rem', 'height': '0.40rem', 'width': '0.40rem' }}></div>
-                </div>
-                <div className="flex justify-center items-center -mt-2">
-                  <div className="bg-[#7a1d32] w-fit px-5 relative">
-                    <div className="bg-[#7a1d32] w-3 h-2 absolute" style={{ 'top': '0.6rem', 'left': '-0.7rem' }}></div>
-                    <h6 className="font-bold text-sm py-1 text-[#e8e2d2]">{dateOfBirth}</h6>
-                    <div className="bg-[#7a1d32] w-3 h-2 absolute" style={{ 'top': '0.6rem', 'right': '-0.7rem' }}></div>
+              {selectedImage && (
+                <div style={{ 'width': '200px', 'height': '200px', 'marginBottom': '-1.5rem' }}>
+                  <div className="absolute top-14 left-6">
+                    <img src={selectedImage && URL.createObjectURL(selectedImage)} style={{ 'clipPath': 'polygon(8% 54%, 33% 27%, 33% 0, 68% 0, 68% 27%, 93% 54%, 93% 96%, 8% 96%)', 'width': '370px', 'maxWidth': '370px', 'height': '420px', 'filter': 'drop-shadow(-5px -1px 0 #e8e2d2) drop-shadow(6px -1px 0 #e8e2d2)', 'marginLeft': photoHorizontalPosition, 'marginTop': photoVerticalPosition, 'padding': '2rem' }}></img>
                   </div>
                 </div>
+              )}
+              <div className="flex flex-col gap-2 absolute bottom-6 left-0 right-0 ml-auto mr-auto pl-12 pr-12">
+                {name && (
+                  <div className="bg-[#e8e2d2] relative">
+                    <div className="bg-[#e8e2d2] w-2 h-5 absolute" style={{ 'top': '0.6rem', 'left': '-0.5rem' }}></div>
+                    <div className="bg-[#e8e2d2] w-7 h-2 absolute" style={{ 'top': '0.95rem', 'left': '-1.5rem' }}></div>
+                    <div className="bg-[#e8e2d2] w-2 absolute" style={{ 'top': '0.15rem', 'left': '-1.1rem', 'height': '0.40rem', 'width': '0.40rem' }}></div>
+                    <div className="bg-[#e8e2d2] w-2 absolute" style={{ 'top': '1.9rem', 'left': '-1.1rem', 'height': '0.40rem', 'width': '0.40rem' }}></div>
+                    <h6 className="text-3xl font-extrabold text-[#7a1d32]" style={{ 'boxShadow': '0px 8px 3px 0px', 'lineHeight': '1.3' }}>{name}</h6>
+                    <div className="bg-[#e8e2d2] w-2 h-5 absolute" style={{ 'top': '0.6rem', 'right': '-0.5rem' }}></div>
+                    <div className="bg-[#e8e2d2] w-7 h-2 absolute" style={{ 'top': '0.95rem', 'right': '-1.5rem' }}></div>
+                    <div className="bg-[#e8e2d2] w-2 absolute" style={{ 'top': '0.15rem', 'right': '-1.1rem', 'height': '0.40rem', 'width': '0.40rem' }}></div>
+                    <div className="bg-[#e8e2d2] w-2 absolute" style={{ 'top': '1.9rem', 'right': '-1.1rem', 'height': '0.40rem', 'width': '0.40rem' }}></div>
+                  </div>
+                )}
+                {dateOfBirth && (
+                  <div className="flex justify-center items-center -mt-2">
+                    <div className="bg-[#7a1d32] w-fit px-5 relative">
+                      <div className="bg-[#7a1d32] w-3 h-2 absolute" style={{ 'top': '0.6rem', 'left': '-0.7rem' }}></div>
+                      <h6 className="font-bold text-sm py-1 text-[#e8e2d2]">{dateOfBirth}</h6>
+                      <div className="bg-[#7a1d32] w-3 h-2 absolute" style={{ 'top': '0.6rem', 'right': '-0.7rem' }}></div>
+                    </div>
+                  </div>
+                )}
               </div>
+            </div>
+            <div className="w-full">
+              <Button label="Descargar figurita" icon="pi pi-download" className="primary-button" onClick={() => { saveAsPng(contentToDownload, { filename: 'Figurita', printDate: false }); }} />
             </div>
           </div>
         </div>
